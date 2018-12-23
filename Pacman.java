@@ -7,12 +7,13 @@ public class Pacman {
 
         System.out.println("");
         JFrame obj = new JFrame();
+        Gameplay gamePlay = new Gameplay();
         obj.setBounds(10,01,600,600);
         obj.setTitle("Pacman by Kajkitsu");
         obj.setResizable(false);
         obj.setVisible(true);
         obj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        obj.add(gamePlay);
     }
 
     /*
