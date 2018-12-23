@@ -1,6 +1,21 @@
 import java.io.*;
 
+import javax.swing.JFrame;
+
 public class Pacman {
+    public static void main(String[] args) {
+
+        System.out.println("");
+        JFrame obj = new JFrame();
+        obj.setBounds(10,01,600,600);
+        obj.setTitle("Pacman by Kajkitsu");
+        obj.setResizable(false);
+        obj.setVisible(true);
+        obj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    }
+
+    /*
     protected int mapa[][] = new int[21][21];
 
     public static void main(String[] args) {
@@ -48,5 +63,6 @@ public class Pacman {
 
         czytaczBufforu.close();
     }
+    */
 
 }
