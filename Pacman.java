@@ -1,10 +1,8 @@
-
 import java.io.*;
 
 import javax.swing.JFrame;
 
-public class Pacman{
-
+public class Pacman {
     public static void main(String[] args) {
 
         System.out.println("");
