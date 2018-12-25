@@ -9,6 +9,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.lang.Object.*;
+import java.util.concurrent.TimeUnit;
+
 import javax.imageio.ImageIO;
 
 //import javax.management.timer.Timer;
@@ -23,7 +25,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
     private int totalBricks = 21;
     private Timer timer;
-    private int delay = 6;
+    private int delay = 10;
 
     private int playerX = 310;
     private int ballposX = 120;
@@ -31,8 +33,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private int ballXdir = -1;
     private int ballYdir = -2;
 
-    BufferedImage ballImg = null;
-    BufferedImage ballImg2 =null;
+    BufferedImage pacmanImg = null;
+    BufferedImage pacmanMapImg = null;
 
     private static final long serialVersionUID = 1L;
 
@@ -41,7 +43,11 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         try {
-            ballImg = ImageIO.read(new File("pacman.jpg"));
+            pacmanImg = ImageIO.read(new File("pacman10-hp-sprite.png"));
+        } catch (IOException e) {
+        }
+        try {
+            pacmanMapImg = ImageIO.read(new File("mapagolge.png"));
         } catch (IOException e) {
         }
         timer = new Timer(delay, this);
@@ -49,10 +55,10 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     }
 
     public void paint(Graphics g) {
-        // backgorund
+        //backgorund
         g.setColor(Color.black);
-        g.fillRect(1, 1, 692, 592);
-
+        g.fillRect(0, 0, 464*2+10,136*2+10+80);
+        /*
         // boredrs
         g.setColor(Color.yellow);
         g.fillRect(0, 0, 3, 592);
@@ -62,12 +68,28 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         // the paddle
         g.setColor(Color.green);
         g.fillRect(playerX, 550, 100, 8);
-
+*/
         // the ball
         //g.setColor(Color.red);
         //g.fillOval(ballposX, ballposY, 20, 20);
-        g.drawImage(ballImg, ballposX, ballposY, 32, 32, Color.black, null);
+      //  g.drawImage(pacmanImg, ballposX, ballposY, 32, 32, Color.black, null);
+       // g.drawImage(pacmanImg, 10+ballposX, 10+ballposY, 10+ballposX+32, 10+ballposY+32,2,2,18,18,null);
+       g.drawImage(pacmanMapImg, 5, 5,  464*2+5, 136*2+5, 0, 0, 464, 136, null);
 
+       g.setColor(Color.white);
+
+       for(int i=0; i<45; i++){
+        g.fillRect(0+i*22, 0, 1,136*2+10+80);  
+       }
+       for(int i=0; i<16; i++){
+        g.fillRect(0, 0+i*22, 464*2+5,1);  
+       }
+
+
+       //for(int i=0; i< 464*2+5 ; i=+40){
+       //    g.fillRect(x, y, width, height);
+       // g.fillRect(i, 0, 1,136*2+10+80);  
+       //}
 
         g.dispose();
 

@@ -2,10 +2,25 @@ import java.io.*;
 
 import javax.swing.JFrame;
 
-public class Pacman {
+public class Pacman extends Map {
     public static void main(String[] args) {
-
+        JFrame obj = new JFrame();
+        Gameplay gamePlay = new Gameplay();
+        Map mapPacman = new Map("map1.txt");
+        /*obj.setBounds(10,10,mapPacman.hight*2+10+30,mapPacman.width*2+10);
+        obj.setBounds(0,0,464*2+10,136*2+10+80);
+        obj.setTitle("Pacman by Kajkitsu");
+        obj.setResizable(false);
+        obj.setVisible(true);
+        obj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        obj.add(gamePlay);
+        */
+        /*
         System.out.println("");
+        Mapa mapaPacman = new Mapa("mapagolge.txt");
+        mapaPacman.loadMap();
+        */
+        /*
         JFrame obj = new JFrame();
         Gameplay gamePlay = new Gameplay();
         obj.setBounds(10,01,600,600);
@@ -14,6 +29,7 @@ public class Pacman {
         obj.setVisible(true);
         obj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         obj.add(gamePlay);
+        */
     }
 
     /*
