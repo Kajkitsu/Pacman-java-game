@@ -14,7 +14,7 @@ public class Map {
     public Map(String path) {
         this.pathToMap = path;
         try {
-            this.loadMap();
+            this.LoadMap();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -28,29 +28,29 @@ public class Map {
 
     }
 
-    public int getHeight(){
+    public int GetHeight(){
         return this.height;
     }
-    public int getWidth(){
+    public int GetWidth(){
         return this.width;
     }
-    public int getPacmanSquareX(){
+    public int GetPacmanSquareX(){
         return this.pacmanSquareX;
     }
-    public int getPacmanSquareY(){
+    public int GetPacmanSquareY(){
         return this.pacmanSquareY;
     }
-    public int getGhostSquareX(int i){
+    public int GetGhostSquareX(int i){
         return this.ghostSquareX[i];
     }
-    public int getGhostSquareY(int i){
+    public int GetGhostSquareY(int i){
         return this.ghostSquareY[i];
     }
-    public int getMap(int x, int y){
+    public int GetMap(int x, int y){
         return this.map[x][y];
     }
 
-    protected void loadMap() throws IOException {
+    protected void LoadMap() throws IOException {
         FileReader fileReader = new FileReader(pathToMap);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
         String readedLine = bufferedReader.readLine();
@@ -129,12 +129,12 @@ public class Map {
 
         }
 
-        this.map = new int[this.height][this.width];
+        this.map = new int[this.width][this.height];
         // wczytanie mapy
-        for (i = 0; i < this.height; i++) {
+        for (int y = 0; y < this.height; y++) {
             readedLine = bufferedReader.readLine();
-            for (int j = 0; j < this.width; j++) {
-                this.map[i][j] += readedLine.charAt(j * 2) - 48;
+            for (int x = 0; x < this.width; x++) {
+                this.map[x][this.height-1-y] = readedLine.charAt(x * 2) - 48;
             }
         }
         this.pathToImgOfMap = bufferedReader.readLine();
