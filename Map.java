@@ -134,7 +134,7 @@ public class Map {
         for (int y = 0; y < this.height; y++) {
             readedLine = bufferedReader.readLine();
             for (int x = 0; x < this.width; x++) {
-                this.map[x][this.height-1-y] = readedLine.charAt(x * 2) - 48;
+                this.map[x][y] = readedLine.charAt(x * 2) - 48;
             }
         }
         this.pathToImgOfMap = bufferedReader.readLine();
