@@ -1,3 +1,5 @@
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.io.*;
 
 public class Map {
@@ -153,6 +155,469 @@ public class Map {
          */
 
         
+    }
+
+    public void DrawMap(Graphics g, BufferedImage pacmanIconImg) {
+        //narozniki
+
+        //skret prawo-dol
+        g.drawImage(pacmanIconImg, 10, 10, 10 + 19*2, 10 + 19*2,106,43,125,62,null);
+        //skret lewo-dol
+        g.drawImage(pacmanIconImg, 10+((this.GetWidth()-1)*19)*2, 10 , 10+(((this.GetWidth()-1)+1)*19)*2, 10 + 19*2,85,43,104,62,null);
+        //skret prawo-gora
+        g.drawImage(pacmanIconImg, 10, 10+((this.GetHeight()-1)*19)*2, 10 + 19*2, 10+(((this.GetHeight()-1)+1)*19)*2,148,43,167,62,null);
+        //skret lewo-gora
+        g.drawImage(pacmanIconImg, 10+((this.GetWidth()-1)*19)*2, 10+((this.GetHeight()-1)*19)*2, 10+(((this.GetWidth()-1)+1)*19)*2, 10+(((this.GetHeight()-1)+1)*19)*2,127,43,146,62,null);
+
+
+        //pasek gorny
+        for (int x = 1,y =0; x < this.GetWidth()-1; x++){
+            if (this.GetMap(x, y) != 0) {
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,190,22,209,41,null);
+            }
+            //pionowy
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x+1, y)!=0
+            && this.GetMap(x-1, y)!=0
+            && this.GetMap(x, y+1)==0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,85,1,104,20,null);
+            }
+            //poziomy
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x+1, y)==0
+            && this.GetMap(x-1, y)==0
+            && this.GetMap(x, y+1)!=0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,106,1,125,20,null);
+            }
+            //koniec od gory
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x+1, y)!=0
+            && this.GetMap(x-1, y)!=0
+            && this.GetMap(x, y+1)!=0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,148,1,167,20,null);
+            }
+            //rozgalezienie od lewej
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x+1, y)!=0
+            && this.GetMap(x-1, y)==0
+            && this.GetMap(x, y+1)==0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,106,22,125,41,null);
+            }
+            //rozgalezienie od prawej
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x+1, y)==0
+            && this.GetMap(x-1, y)!=0
+            && this.GetMap(x, y+1)==0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,148,22,167,41,null);
+            }
+            //rozgalezienie od dolu
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x+1, y)==0
+            && this.GetMap(x-1, y)==0
+            && this.GetMap(x, y+1)==0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,169,22,188,41,null);
+            }
+            //skret lewo-gora
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x+1, y)!=0
+            && this.GetMap(x-1, y)==0
+            && this.GetMap(x, y+1)!=0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,127,43,146,62,null);
+            }
+            //skret prawo-gora
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x+1, y)==0
+            && this.GetMap(x-1, y)!=0
+            && this.GetMap(x, y+1)!=0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,148,43,167,62,null);
+            }
+
+        }
+
+        //pasek dolny
+        for (int x = 1,y =this.GetHeight()-1; x < this.GetWidth()-1; x++){
+            if (this.GetMap(x, y) != 0) {
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,190,22,209,41,null);
+            }
+            //pionowy
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x+1, y)!=0
+            && this.GetMap(x-1, y)!=0
+            && this.GetMap(x, y-1)==0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,85,1,104,20,null);
+            }
+            //poziomy
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x+1, y)==0
+            && this.GetMap(x-1, y)==0
+            && this.GetMap(x, y-1)!=0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,106,1,125,20,null);
+            }
+            //koniec od dolu
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x+1, y)!=0
+            && this.GetMap(x-1, y)!=0
+            && this.GetMap(x, y-1)!=0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,190,1,209,20,null);
+            }
+            //rozgalezienie od lewej
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x+1, y)!=0
+            && this.GetMap(x-1, y)==0
+            && this.GetMap(x, y-1)==0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,106,22,125,41,null);
+            }
+            //rozgalezienie od gory
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x+1, y)==0
+            && this.GetMap(x-1, y)==0
+            && this.GetMap(x, y-1)==0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,127,22,146,41,null);
+            }
+            //rozgalezienie od prawej
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x+1, y)==0
+            && this.GetMap(x-1, y)!=0
+            && this.GetMap(x, y-1)==0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,148,22,167,41,null);
+            }
+            //skret lewo-dol
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x+1, y)!=0
+            && this.GetMap(x-1, y)==0
+            && this.GetMap(x, y-1)!=0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,85,43,104,62,null);
+            }
+            //skret prawo-dol
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x+1, y)==0
+            && this.GetMap(x-1, y)!=0
+            && this.GetMap(x, y-1)!=0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,106,43,125,62,null);
+            }
+        }
+
+        //pasek lewy
+        for (int y = 1,x = 0; y < this.GetHeight()-1; y++){
+            
+            if (this.GetMap(x, y) != 0) {
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,190,22,209,41,null);
+            }
+            //koniec od lewej strony
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x+1, y)!=0
+            && this.GetMap(x, y-1)!=0
+            && this.GetMap(x, y+1)!=0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,127,1,146,20,null);
+            }
+            //pionowy
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x+1, y)!=0
+            && this.GetMap(x, y-1)==0
+            && this.GetMap(x, y+1)==0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,85,1,104,20,null);
+            }
+            //poziomy
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x+1, y)==0
+            && this.GetMap(x, y-1)!=0
+            && this.GetMap(x, y+1)!=0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,106,1,125,20,null);
+            }
+            //rozgalezienie od gory
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x+1, y)==0
+            && this.GetMap(x, y-1)==0
+            && this.GetMap(x, y+1)!=0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,127,22,146,41,null);
+            }
+            //rozgalezienie od prawej
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x+1, y)==0
+            && this.GetMap(x, y-1)==0
+            && this.GetMap(x, y+1)==0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,148,22,167,41,null);
+            }
+            //rozgalezienie od dolu
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x+1, y)==0
+            && this.GetMap(x, y-1)!=0
+            && this.GetMap(x, y+1)==0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,169,22,188,41,null);
+            }
+            //skret lewo-dol
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x+1, y)!=0
+            && this.GetMap(x, y-1)!=0
+            && this.GetMap(x, y+1)==0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,85,43,104,62,null);
+            }
+            //skret lewo-gora
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x+1, y)!=0
+            && this.GetMap(x, y-1)==0
+            && this.GetMap(x, y+1)!=0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,127,43,146,62,null);
+            }
+
+        }
+
+        //pasek prawy
+        for (int y = 1,x = this.GetHeight()-1; y < this.GetHeight()-1; y++){
+            if (this.GetMap(x, y) != 0) {
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,190,22,209,41,null);
+            }
+            //kolko
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x-1, y)!=0
+            && this.GetMap(x, y-1)!=0
+            && this.GetMap(x, y+1)!=0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,85,22,104,41,null);
+            }
+            //koniec od prawej strony
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x-1, y)!=0
+            && this.GetMap(x, y-1)!=0
+            && this.GetMap(x, y+1)!=0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,169,1,188,20,null);
+            }
+            //pionowy
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x-1, y)!=0
+            && this.GetMap(x, y-1)==0
+            && this.GetMap(x, y+1)==0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,85,1,104,20,null);
+            }
+            //poziomy
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x-1, y)==0
+            && this.GetMap(x, y-1)!=0
+            && this.GetMap(x, y+1)!=0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,106,1,125,20,null);
+            }
+            //rozgalezienie od lewej
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x-1, y)==0
+            && this.GetMap(x, y-1)==0
+            && this.GetMap(x, y+1)==0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,106,22,125,41,null);
+            }
+            //rozgalezienie od gory
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x-1, y)==0
+            && this.GetMap(x, y-1)==0
+            && this.GetMap(x, y+1)!=0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,127,22,146,41,null);
+            }
+            //rozgalezienie od dolu
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x-1, y)==0
+            && this.GetMap(x, y-1)!=0
+            && this.GetMap(x, y+1)==0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,169,22,188,41,null);
+            }
+            //skret prawo-dol
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x-1, y)!=0
+            && this.GetMap(x, y-1)!=0
+            && this.GetMap(x, y+1)==0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,106,43,125,62,null);
+            }
+            //skret prawo-gora
+            if (this.GetMap(x, y) == 0
+            && this.GetMap(x-1, y)!=0
+            && this.GetMap(x, y-1)==0
+            && this.GetMap(x, y+1)!=0
+            ){
+                g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,148,43,167,62,null);
+            }
+        }
+
+
+        //srodek
+        for (int y = 1; y < this.GetHeight()-1; y++) {
+            for (int x = 1; x < this.GetWidth()-1; x++) {
+                if (this.GetMap(x, y) != 0) {
+                    g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,190,22,209,41,null);
+                }
+                //kolko
+                if (this.GetMap(x, y) == 0
+                && this.GetMap(x+1, y)!=0
+                && this.GetMap(x-1, y)!=0
+                && this.GetMap(x, y-1)!=0
+                && this.GetMap(x, y+1)!=0
+                ){
+                    g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,85,22,104,41,null);
+                }
+                //koniec od lewej strony
+                if (this.GetMap(x, y) == 0
+                && this.GetMap(x+1, y)!=0
+                && this.GetMap(x-1, y)==0
+                && this.GetMap(x, y-1)!=0
+                && this.GetMap(x, y+1)!=0
+                ){
+                    g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,127,1,146,20,null);
+                }
+                //koniec od prawej strony
+                if (this.GetMap(x, y) == 0
+                && this.GetMap(x+1, y)==0
+                && this.GetMap(x-1, y)!=0
+                && this.GetMap(x, y-1)!=0
+                && this.GetMap(x, y+1)!=0
+                ){
+                    g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,169,1,188,20,null);
+                }
+                //pionowy
+                if (this.GetMap(x, y) == 0
+                && this.GetMap(x+1, y)!=0
+                && this.GetMap(x-1, y)!=0
+                && this.GetMap(x, y-1)==0
+                && this.GetMap(x, y+1)==0
+                ){
+                    g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,85,1,104,20,null);
+                }
+                //poziomy
+                if (this.GetMap(x, y) == 0
+                && this.GetMap(x+1, y)==0
+                && this.GetMap(x-1, y)==0
+                && this.GetMap(x, y-1)!=0
+                && this.GetMap(x, y+1)!=0
+                ){
+                    g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,106,1,125,20,null);
+                }
+                //koniec od gory
+                if (this.GetMap(x, y) == 0
+                && this.GetMap(x+1, y)!=0
+                && this.GetMap(x-1, y)!=0
+                && this.GetMap(x, y-1)==0
+                && this.GetMap(x, y+1)!=0
+                ){
+                    g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,148,1,167,20,null);
+                }
+                //koniec od dolu
+                if (this.GetMap(x, y) == 0
+                && this.GetMap(x+1, y)!=0
+                && this.GetMap(x-1, y)!=0
+                && this.GetMap(x, y-1)!=0
+                && this.GetMap(x, y+1)==0
+                ){
+                    g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,190,1,209,20,null);
+                }
+                //skrzyzowanie
+                if (this.GetMap(x, y) == 0
+                && this.GetMap(x+1, y)==0
+                && this.GetMap(x-1, y)==0
+                && this.GetMap(x, y-1)==0
+                && this.GetMap(x, y+1)==0
+                ){
+                    g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,85,22,104,41,null);
+                }
+                //rozgalezienie od lewej
+                if (this.GetMap(x, y) == 0
+                && this.GetMap(x+1, y)!=0
+                && this.GetMap(x-1, y)==0
+                && this.GetMap(x, y-1)==0
+                && this.GetMap(x, y+1)==0
+                ){
+                    g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,106,22,125,41,null);
+                }
+                //rozgalezienie od gory
+                if (this.GetMap(x, y) == 0
+                && this.GetMap(x+1, y)==0
+                && this.GetMap(x-1, y)==0
+                && this.GetMap(x, y-1)==0
+                && this.GetMap(x, y+1)!=0
+                ){
+                    g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,127,22,146,41,null);
+                }
+                //rozgalezienie od prawej
+                if (this.GetMap(x, y) == 0
+                && this.GetMap(x+1, y)==0
+                && this.GetMap(x-1, y)!=0
+                && this.GetMap(x, y-1)==0
+                && this.GetMap(x, y+1)==0
+                ){
+                    g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,148,22,167,41,null);
+                }
+                //rozgalezienie od dolu
+                if (this.GetMap(x, y) == 0
+                && this.GetMap(x+1, y)==0
+                && this.GetMap(x-1, y)==0
+                && this.GetMap(x, y-1)!=0
+                && this.GetMap(x, y+1)==0
+                ){
+                    g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,169,22,188,41,null);
+                }
+                //skret lewo-dol
+                if (this.GetMap(x, y) == 0
+                && this.GetMap(x+1, y)!=0
+                && this.GetMap(x-1, y)==0
+                && this.GetMap(x, y-1)!=0
+                && this.GetMap(x, y+1)==0
+                ){
+                    g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,85,43,104,62,null);
+                }
+                //skret prawo-dol
+                if (this.GetMap(x, y) == 0
+                && this.GetMap(x+1, y)==0
+                && this.GetMap(x-1, y)!=0
+                && this.GetMap(x, y-1)!=0
+                && this.GetMap(x, y+1)==0
+                ){
+                    g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,106,43,125,62,null);
+                }
+                //skret lewo-gora
+                if (this.GetMap(x, y) == 0
+                && this.GetMap(x+1, y)!=0
+                && this.GetMap(x-1, y)==0
+                && this.GetMap(x, y-1)==0
+                && this.GetMap(x, y+1)!=0
+                ){
+                    g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,127,43,146,62,null);
+                }
+                //skret prawo-gora
+                if (this.GetMap(x, y) == 0
+                && this.GetMap(x+1, y)==0
+                && this.GetMap(x-1, y)!=0
+                && this.GetMap(x, y-1)==0
+                && this.GetMap(x, y+1)!=0
+                ){
+                    g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,148,43,167,62,null);
+                }
+            }
+        }
     }
 
 }
