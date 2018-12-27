@@ -3,12 +3,12 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 
 public class Map {
-    protected String pathToMap;
-    protected String pathToImgOfMap;
-    protected int height;
-    protected int width;
-    protected int pacmanSquareX;
-    protected int pacmanSquareY;
+    protected String pathToMap = null;
+    protected String pathToImgOfMap = null;
+    protected int height = 0;
+    protected int width = 0;
+    protected int pacmanSquareX = 0;
+    protected int pacmanSquareY = 0;
     protected int ghostSquareX[] = new int[4];
     protected int ghostSquareY[] = new int[4];
     protected int map[][];
