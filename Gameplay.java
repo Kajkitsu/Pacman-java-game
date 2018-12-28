@@ -24,34 +24,18 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private boolean play = false;
 
     private Timer timer;
-    private int delay = 20;
+    private int delay = 15;
     private int cycle = 0;
-    private Random rand = new Random();
 
-    private int pacmanXPosition = 0;
-    private int pacmanYPosition = 0;
-    private int pacmanXDirection = 0;
-    private int pacmanYDirection = 0;
+    private Pacman pacmanPlayer;
+    private Ghost ghost[] = new Ghost[4];
+
 
     private int wantedXDirection = 0;
     private int wantedYDirection = 0;
 
-    private int ghostXPosition[] = new int[4];
-    private int ghostYPosition[] = new int[4];
-    private int ghostXDirection[] = new int[4];
-    private int ghostYDirection[] = new int[4];
-    private int randWandtedGhostXDirection = 0;
-    private int randWandtedGhostYDirection = 0;
-
     private int score = 0;
 
-    private int totalBricks = 21;
-
-    private int playerX = 310;
-    private int ballposX = 120;
-    private int ballposY = 350;
-    private int ballXdir = -1;
-    private int ballYdir = -2;
 
     private Map mapPacman = null;
 
@@ -72,16 +56,12 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         timer = new Timer(delay, this);
         timer.start();
 
-        // ustalanie pozycji startowych
-        pacmanXPosition = mapPacman.GetPacmanSquareX() * 19;
-        pacmanYPosition = mapPacman.GetPacmanSquareY() * 19;
+       
+        //tworzenie Pacmana i Ghostow
+        pacmanPlayer = new Pacman(mapPacman.GetPacmanSquareX() * 19,mapPacman.GetPacmanSquareY() * 19,mapPacman);
+        for (int i = 0; i < 4; i++)
+            ghost[i] = new Ghost(mapPacman.GetGhostSquareX(i) *19 ,mapPacman.GetGhostSquareY(i)*19,mapPacman,pacmanPlayer);
 
-        for (int i = 0; i < 4; i++) {
-            ghostXPosition[i] = mapPacman.GetGhostSquareX(i) * 19;
-            ghostYPosition[i] = mapPacman.GetGhostSquareY(i) * 19;
-            ghostXDirection[i] = 0;
-            ghostYDirection[i] = 0;
-        }
     }
 
     public void paint(Graphics g) {
@@ -96,12 +76,12 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
         // Rysowanie pacmana
         g.setColor(Color.yellow);
-        g.fillRect(10 + pacmanXPosition * 2, 10 + pacmanYPosition * 2, 19 * 2, 19 * 2);
+        g.fillRect(10 + pacmanPlayer.GetXPosition() * 2, 10 + pacmanPlayer.GetYPosition() * 2, 19 * 2, 19 * 2);
 
         // Rysowanie Ghostow
         g.setColor(Color.pink);
         for (int i = 0; i < 4; i++) {
-            g.fillRect(10 + ghostXPosition[i] * 2, 10 + ghostYPosition[i] * 2, 19 * 2, 19 * 2);
+            g.fillRect(10 + ghost[i].GetXPosition() * 2, 10 + ghost[i].GetYPosition() * 2, 19 * 2, 19 * 2);
         }
 
         /*
@@ -147,165 +127,34 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         timer.start();
 
         if (play) {
-            TryToChangeDirectionOfPacman(wantedXDirection, wantedYDirection);
+            pacmanPlayer.TryToChangeDirectionOfPacman(wantedXDirection, wantedYDirection);
 
             cycle++;
             if (cycle == 4)
                 cycle = 1;
 
             // poruszanie sie pacmana
-            if (mapPacman.GetMap((pacmanXPosition + pacmanXDirection) / 19,
-                    (pacmanYPosition + pacmanYDirection) / 19) != 0
-                    && mapPacman.GetMap(((pacmanXPosition + pacmanXDirection + 18) / 19),
-                            ((pacmanYPosition + pacmanYDirection + 18) / 19)) != 0
-                    && mapPacman.GetMap(((pacmanXPosition + pacmanXDirection) / 19),
-                            ((pacmanYPosition + pacmanYDirection + 18) / 19)) != 0
-                    && mapPacman.GetMap(((pacmanXPosition + pacmanXDirection + 18) / 19),
-                            ((pacmanYPosition + pacmanYDirection) / 19)) != 0) {
-                pacmanXPosition += pacmanXDirection;
-                pacmanYPosition += pacmanYDirection;
-            } else {
-                pacmanXDirection = 0;
-                pacmanYDirection = 0;
-            }
+
+            pacmanPlayer.MovePacman();
 
             // ograniczone cyklami gry
             if (cycle % 3 != 0) {
                 // poruszanie sie ghostow
                 for (int i = 0; i < 4; i++) {
-                    if (       mapPacman.GetMap((ghostXPosition[i] + ghostXDirection[i]) / 19,(ghostYPosition[i] + ghostYDirection[i]) / 19) != 0
-                            && mapPacman.GetMap(((ghostXPosition[i] + ghostXDirection[i] + 18) / 19),((ghostYPosition[i] + ghostYDirection[i] + 18) / 19)) != 0
-                            && mapPacman.GetMap(((ghostXPosition[i] + ghostXDirection[i]) / 19),((ghostYPosition[i] + ghostYDirection[i] + 18) / 19)) != 0
-                            && mapPacman.GetMap(((ghostXPosition[i] + ghostXDirection[i] + 18) / 19),((ghostYPosition[i] + ghostYDirection[i]) / 19)) != 0) {
-                        ghostXPosition[i] += ghostXDirection[i];
-                        ghostYPosition[i] += ghostYDirection[i];
-                    } else {
-
-                        ghostXDirection[i] = 0;
-                        ghostYDirection[i] = 0;
-                    }
-                }
-            }
-
-            //losowy kierunek poruszania sie ghostow
-            for (int i = 0; i < 4; i++){
-                if((ghostXDirection[i] == 0) && (ghostYDirection[i] == 0)){
-                    while ((ghostXDirection[i] == 0) && (ghostYDirection[i] == 0)) {
-                        int n = rand.nextInt(4) + 1;
-
-                        switch (n) {
-                        case 1:
-                            randWandtedGhostXDirection = 1;
-                            randWandtedGhostYDirection = 0;
-                            break;
-
-                        case 2:
-                            randWandtedGhostXDirection = -1;
-                            randWandtedGhostYDirection = 0;
-                            break;
-
-                        case 3:
-                            randWandtedGhostXDirection = 0;
-                            randWandtedGhostYDirection = 1;
-                            break;
-
-                        case 4:
-                            randWandtedGhostXDirection = 0;
-                            randWandtedGhostYDirection = -1;
-                            break;
-
-                        default:
-                            break;
-                        }
-
-                        if(
-                            mapPacman.GetMap((ghostXPosition[i]+randWandtedGhostXDirection)/19, (ghostYPosition[i]+randWandtedGhostYDirection)/19)!=0 &&
-                            mapPacman.GetMap(((ghostXPosition[i]+randWandtedGhostXDirection+18)/19), ((ghostYPosition[i]+randWandtedGhostYDirection+18)/19))!=0 &&
-                            mapPacman.GetMap(((ghostXPosition[i]+randWandtedGhostXDirection)/19), ((ghostYPosition[i]+randWandtedGhostYDirection+18)/19))!=0 &&
-                            mapPacman.GetMap(((ghostXPosition[i]+randWandtedGhostXDirection+18)/19), ((ghostYPosition[i]+randWandtedGhostYDirection)/19))!=0 ){
-                            ghostYDirection[i]=randWandtedGhostYDirection;
-                            ghostXDirection[i]=randWandtedGhostXDirection;
-                        }
-
-
-
-                    }
-
-
+                    ghost[i].MoveGhost();
 
                 }
             }
-            
 
             // wykrywanie ghostow
-            for (int i = 0; i < 4; i++) {
-                boolean isObstacle = false;
-                if (pacmanXPosition == ghostXPosition[i]) {
-                    if (pacmanYPosition > ghostYPosition[i]) {
-                        int j = ghostYPosition[i];
-                        while (pacmanYPosition > j) {
-                            j++;
-                            if (mapPacman.GetMap(pacmanXPosition / 19, j / 19) == 0) {
-                                isObstacle = true;
-                            }
-                        }
-                    } else {
-                        int j = pacmanYPosition;
-                        while (ghostYPosition[i] > j) {
-                            j++;
-                            if (mapPacman.GetMap(pacmanXPosition / 19, j / 19) == 0) {
-                                isObstacle = true;
-                            }
-                        }
-                    }
-                    if (!isObstacle) {
-                        ghostXDirection[i] = 0;
-                        ghostYDirection[i] = pacmanYPosition > ghostYPosition[i] ? 1 : (-1);
-                    }
+            for (int i = 0; i < 4; i++)
+                ghost[i].DetectPacman();
 
-                } else if (pacmanYPosition == ghostYPosition[i]) {
-                    if (pacmanXPosition > ghostXPosition[i]) {
-                        int j = ghostXPosition[i];
-                        while (pacmanXPosition > j) {
-                            j++;
-                            if (mapPacman.GetMap(j / 19, pacmanYPosition / 19) == 0) {
-                                isObstacle = true;
-                            }
-                        }
-                    } else {
-                        int j = pacmanXPosition;
-                        while (ghostXPosition[i] > j) {
-                            j++;
-                            if (mapPacman.GetMap(j / 19, pacmanYPosition / 19) == 0) {
-                                isObstacle = true;
-                            }
-                        }
-                    }
-                    if (!isObstacle) {
-                        ghostXDirection[i] = pacmanXPosition > ghostXPosition[i] ? 1 : (-1);
-                        ghostYDirection[i] = 0;
-                    }
-
-                }
-
-            }
-
-            // for(int j=0; j<mapPacman.GetHeight(); j++){
-            // if(pacmanYPosition==ghostYPosition[i] + j){
-            // ghostXDirection[i]=0;
-            // ghostYDirection[i]=-1 ;
-            // }
-            // if(pacmanYPosition==ghostYPosition[i] - j){
-            // ghostXDirection[i]=0;
-            // ghostYDirection[i]=1 ;
-            // }
-
-            // }
 
         }
 
-        System.out.println("pacmanXpos " + pacmanXPosition + " pacmanYPosition " + pacmanYPosition);
-        System.out.println("pacmanXpos/19 " + pacmanXPosition / 19 + " pacmanYPosition/19 " + pacmanYPosition / 19);
+        //System.out.println("pacmanXpos " + pacmanXPosition + " pacmanYPosition " + pacmanYPosition);
+        //System.out.println("pacmanXpos/19 " + pacmanXPosition / 19 + " pacmanYPosition/19 " + pacmanYPosition / 19);
         repaint();
     }
 
@@ -343,64 +192,6 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         }
         
     }
-
-    private void TryToChangeDirectionOfPacman(int wantedXDirection, int wantedYDirection){
-        if(mapPacman.GetMap((pacmanXPosition+wantedXDirection)/19, (pacmanYPosition+wantedYDirection)/19)!=0 &&
-            mapPacman.GetMap(((pacmanXPosition+wantedXDirection+18)/19), ((pacmanYPosition+wantedYDirection+18)/19))!=0 &&
-            mapPacman.GetMap(((pacmanXPosition+wantedXDirection)/19), ((pacmanYPosition+wantedYDirection+18)/19))!=0 &&
-            mapPacman.GetMap(((pacmanXPosition+wantedXDirection+18)/19), ((pacmanYPosition+wantedYDirection)/19))!=0 ){
-                pacmanYDirection=wantedYDirection;
-                pacmanXDirection=wantedXDirection;
-            }
-
-    }
-
-    // @Override
-    // public void keyPressed(KeyEvent e) {
-    //     int pacmanXSquare = ((pacmanXpos) / 19);
-    //     int pacmanYSquare = ((pacmanYPosition) / 19);
-
-    //     if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-    //         play=true;
-    //         if(mapPacman.GetMap((pacmanXpos+1)/19, (pacmanYPosition)/19)!=0 &&
-    //         mapPacman.GetMap(((pacmanXpos+1+18)/19), ((pacmanYPosition+18)/19))!=0 &&
-    //         mapPacman.GetMap(((pacmanXpos+1)/19), ((pacmanYPosition+18)/19))!=0 &&
-    //         mapPacman.GetMap(((pacmanXpos+1+18)/19), ((pacmanYPosition)/19))!=0 ){
-    //             pacmanXDirection = 1;
-    //             pacmanYDirection = 0;
-    //         }
-    //     }
-    //     if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-    //         play=true;
-    //         if(mapPacman.GetMap((pacmanXpos-1)/19, (pacmanYPosition)/19)!=0 &&
-    //         mapPacman.GetMap(((pacmanXpos-1+18)/19), ((pacmanYPosition+18)/19))!=0 &&
-    //         mapPacman.GetMap(((pacmanXpos-1)/19), ((pacmanYPosition+18)/19))!=0 &&
-    //         mapPacman.GetMap(((pacmanXpos-1+18)/19), ((pacmanYPosition)/19))!=0 ) {
-    //             pacmanXDirection = -1;
-    //             pacmanYDirection = 0;
-    //         }
-    //     }
-    //     if (e.getKeyCode() == KeyEvent.VK_UP) {
-    //         play=true;
-    //         if(mapPacman.GetMap((pacmanXpos)/19, (pacmanYPosition-1)/19)!=0 &&
-    //         mapPacman.GetMap(((pacmanXpos+18)/19), ((pacmanYPosition-1+18)/19))!=0 &&
-    //         mapPacman.GetMap(((pacmanXpos)/19), ((pacmanYPosition-1+18)/19))!=0 &&
-    //         mapPacman.GetMap(((pacmanXpos+18)/19), ((pacmanYPosition-1)/19))!=0 ) {
-    //             pacmanXDirection = 0;
-    //             pacmanYDirection = -1;
-    //         }
-    //     }
-    //     if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-    //         play=true;
-    //         if(mapPacman.GetMap((pacmanXpos)/19, (pacmanYPosition+1)/19)!=0 &&
-    //         mapPacman.GetMap(((pacmanXpos+18)/19), ((pacmanYPosition+1+18)/19))!=0 &&
-    //         mapPacman.GetMap(((pacmanXpos)/19), ((pacmanYPosition+1+18)/19))!=0 &&
-    //         mapPacman.GetMap(((pacmanXpos+18)/19), ((pacmanYPosition+1)/19))!=0 ) {
-    //             pacmanXDirection = 0;
-    //             pacmanYDirection = 1;
-    //         }
-    //     }
-    // }
 
     @Override
     public void keyReleased(KeyEvent e) {

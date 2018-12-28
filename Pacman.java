@@ -1,85 +1,58 @@
-import java.io.*;
+public class Pacman  {
 
-import javax.swing.JFrame;
 
-public class Pacman extends Map {
-    public static void main(String[] args) {
-        JFrame obj = new JFrame();
-        Map mapPacman = new Map("map1.txt");
-        Gameplay gamePlay = new Gameplay(mapPacman);
-        obj.setBounds(0,0,mapPacman.GetWidth()*19*2+20,mapPacman.GetHeight()*2*19+100);
-        //obj.setBounds(0,0,464*2+10,136*2+10+80);
-        obj.setTitle("Pacman by Kajkitsu");
-        obj.setResizable(false);
-        obj.setVisible(true);
-        obj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        obj.add(gamePlay);
-        
-        /*
-        System.out.println("");
-        Mapa mapaPacman = new Mapa("mapagolge.txt");
-        mapaPacman.loadMap();
-        */
-        /*
-        JFrame obj = new JFrame();
-        Gameplay gamePlay = new Gameplay();
-        obj.setBounds(10,01,600,600);
-        obj.setTitle("Pacman by Kajkitsu");
-        obj.setResizable(false);
-        obj.setVisible(true);
-        obj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        obj.add(gamePlay);
-        */
-    }
+    private Map mapPacman = null;
 
-    /*
-    protected int mapa[][] = new int[21][21];
+    private int pacmanXPosition = 0;
+    private int pacmanYPosition = 0;
+    private int pacmanXDirection = 0;
+    private int pacmanYDirection = 0;
 
-    public static void main(String[] args) {
 
-        System.out.println("");
-        String x = "TEST";
-        System.out.println(x + " ");
-        System.out.println("");
-        Pacman gra = new Pacman();
-        gra.PierwszeUruchominie();
+    public Pacman () {
 
     }
 
-    public void PierwszeUruchominie() {
-        try {
-            wczytajMape("mapa1.pac");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        for (int i = 0; i < 21; i++) {
-            for (int j = 0; j < 21; j++) {
-                System.out.print(mapa[i][j]);
-                
-            }
-            System.out.println("");
-        }
-
+    public Pacman (int x, int y, Map map){
+        this.pacmanXPosition=x;
+        this.pacmanYPosition=y;
+        this.mapPacman=map;
     }
 
-    public void wczytajMape(String sciezkaMapy) throws IOException {
-        FileReader czytaczPliku = new FileReader(sciezkaMapy);
-        BufferedReader czytaczBufforu = new BufferedReader(czytaczPliku);
+    public int GetXPosition(){
+        return this.pacmanXPosition;
+    }
 
-        String liczba;
-        char znak;
-        for (int i = 0; i < 21; i++) {
-            liczba = czytaczBufforu.readLine();
-            for (int j = 0; j < 21; j++) {
-                znak=liczba.charAt(j);
-                mapa[i][j] = ((int)znak ) - 48;
+    public int GetYPosition(){
+        return this.pacmanYPosition;
+    }
+
+    public void TryToChangeDirectionOfPacman(int wantedXDirection, int wantedYDirection){
+        if(this.mapPacman.GetMap((this.pacmanXPosition+wantedXDirection)/19, (this.pacmanYPosition+wantedYDirection)/19)!=0 &&
+            this.mapPacman.GetMap(((this.pacmanXPosition+wantedXDirection+18)/19), ((this.pacmanYPosition+wantedYDirection+18)/19))!=0 &&
+            this.mapPacman.GetMap(((this.pacmanXPosition+wantedXDirection)/19), ((this.pacmanYPosition+wantedYDirection+18)/19))!=0 &&
+            this.mapPacman.GetMap(((this.pacmanXPosition+wantedXDirection+18)/19), ((this.pacmanYPosition+wantedYDirection)/19))!=0 ){
+                this.pacmanYDirection=wantedYDirection;
+                this.pacmanXDirection=wantedXDirection;
             }
 
-        }
-
-        czytaczBufforu.close();
     }
-    */
+
+    public void MovePacman(){
+        if (this.mapPacman.GetMap((this.pacmanXPosition + this.pacmanXDirection) / 19,
+                    (this.pacmanYPosition + this.pacmanYDirection) / 19) != 0
+                    && this.mapPacman.GetMap(((this.pacmanXPosition + this.pacmanXDirection + 18) / 19),
+                            ((this.pacmanYPosition + this.pacmanYDirection + 18) / 19)) != 0
+                    && this.mapPacman.GetMap(((this.pacmanXPosition + this.pacmanXDirection) / 19),
+                            ((this.pacmanYPosition + this.pacmanYDirection + 18) / 19)) != 0
+                    && this.mapPacman.GetMap(((this.pacmanXPosition + this.pacmanXDirection + 18) / 19),
+                            ((this.pacmanYPosition + this.pacmanYDirection) / 19)) != 0) {
+                this.pacmanXPosition += this.pacmanXDirection;
+                this.pacmanYPosition += this.pacmanYDirection;
+            } else {
+                this.pacmanXDirection = 0;
+                this.pacmanYDirection = 0;
+            }
+    }
 
 }
