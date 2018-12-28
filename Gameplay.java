@@ -25,13 +25,18 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private Timer timer;
     private int delay = 20;
 
-    private int pacmanXpos = 0;
-    private int pacmanYpos = 0;
+    private int pacmanXPosition = 0;
+    private int pacmanYPosition = 0;
     private int pacmanXDirection = 0;
     private int pacmanYDirection = 0;
 
-    private int wantedXDirection =0;
-    private int wantedYDirection =0;
+    private int wantedXDirection = 0;
+    private int wantedYDirection = 0;
+
+    private int ghostXPosition[] = new int[4];
+    private int ghostYPosition[] = new int[4];
+    private int ghostXDirection[] = new int[4];
+    private int ghostYDirection[] = new int[4];
 
     private int score = 0;
 
@@ -61,8 +66,17 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
         timer = new Timer(delay, this);
         timer.start();
-        pacmanXpos = mapPacman.GetPacmanSquareX() * 19;
-        pacmanYpos = mapPacman.GetPacmanSquareY() * 19;
+
+        // ustalanie pozycji startowych
+        pacmanXPosition = mapPacman.GetPacmanSquareX() * 19;
+        pacmanYPosition = mapPacman.GetPacmanSquareY() * 19;
+
+        for (int i = 0; i < 4; i++) {
+            ghostXPosition[i] = mapPacman.GetGhostSquareX(i) * 19;
+            ghostYPosition[i] = mapPacman.GetGhostSquareY(i) * 19;
+            ghostXDirection[i] = 0;
+            ghostYDirection[i] = 0;
+        }
     }
 
     public void paint(Graphics g) {
@@ -77,7 +91,13 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
         // Rysowanie pacmana
         g.setColor(Color.yellow);
-        g.fillRect(10 + pacmanXpos*2 , 10 + pacmanYpos*2 , 19 * 2, 19 * 2);
+        g.fillRect(10 + pacmanXPosition * 2, 10 + pacmanYPosition * 2, 19 * 2, 19 * 2);
+
+        // Rysowanie Ghostow
+        g.setColor(Color.pink);
+        for (int i = 0; i < 4; i++) {
+            g.fillRect(10 + ghostXPosition[i] * 2, 10 + ghostYPosition[i] * 2, 19 * 2, 19 * 2);
+        }
 
         /*
          * // boredrs g.setColor(Color.yellow); g.fillRect(0, 0, 3, 592); g.fillRect(0,
@@ -104,16 +124,14 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
          * g.fillRect(i, 0, 1,136*2+10+80); //}
          */
 
-        //siatka do Debugowania
+        // siatka do Debugowania
         g.setColor(Color.white);
-        for(int i=0; i< mapPacman.GetHeight()+19*2+60 ; i++){
-            g.fillRect(10,9+(i*19*2), mapPacman.GetWidth()*2*19 ,2);
+        for (int i = 0; i < mapPacman.GetHeight() + 19 * 2 + 60; i++) {
+            g.fillRect(10, 9 + (i * 19 * 2), mapPacman.GetWidth() * 2 * 19, 2);
         }
-        for(int i=0; i< mapPacman.GetWidth()+19*2 ; i++){
-            g.fillRect(9+(i*19*2),10, 2, mapPacman.GetHeight()*2*19 );
+        for (int i = 0; i < mapPacman.GetWidth() + 19 * 2; i++) {
+            g.fillRect(9 + (i * 19 * 2), 10, 2, mapPacman.GetHeight() * 2 * 19);
         }
-
-
 
         g.dispose();
 
@@ -124,23 +142,106 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         timer.start();
         TryToChangeDirectionOfPacman(wantedXDirection,wantedYDirection);
         if (play) {
-            if(mapPacman.GetMap((pacmanXpos+pacmanXDirection)/19, (pacmanYpos+pacmanYDirection)/19)!=0 &&
-            mapPacman.GetMap(((pacmanXpos+pacmanXDirection+18)/19), ((pacmanYpos+pacmanYDirection+18)/19))!=0 &&
-            mapPacman.GetMap(((pacmanXpos+pacmanXDirection)/19), ((pacmanYpos+pacmanYDirection+18)/19))!=0 &&
-            mapPacman.GetMap(((pacmanXpos+pacmanXDirection+18)/19), ((pacmanYpos+pacmanYDirection)/19))!=0 ){
-                pacmanXpos+=pacmanXDirection;
-                pacmanYpos+=pacmanYDirection;
+
+            //poruszanie sie pacmana
+            if(mapPacman.GetMap((pacmanXPosition+pacmanXDirection)/19, (pacmanYPosition+pacmanYDirection)/19)!=0 &&
+            mapPacman.GetMap(((pacmanXPosition+pacmanXDirection+18)/19), ((pacmanYPosition+pacmanYDirection+18)/19))!=0 &&
+            mapPacman.GetMap(((pacmanXPosition+pacmanXDirection)/19), ((pacmanYPosition+pacmanYDirection+18)/19))!=0 &&
+            mapPacman.GetMap(((pacmanXPosition+pacmanXDirection+18)/19), ((pacmanYPosition+pacmanYDirection)/19))!=0 ){
+                pacmanXPosition += pacmanXDirection;
+                pacmanYPosition += pacmanYDirection;
+            } else {
+                pacmanXDirection = 0;
+                pacmanYDirection = 0;
             }
-            else {
-                pacmanXDirection=0;
-                pacmanYDirection=0;
+
+            // poruszanie sie ghostow
+            for (int i = 0; i < 4; i++) {
+                if( mapPacman.GetMap((ghostXPosition[i]+ghostXDirection[i])/19, (ghostYPosition[i]+ghostYDirection[i])/19)!=0 &&
+                    mapPacman.GetMap(((ghostXPosition[i]+ghostXDirection[i]+18)/19), ((ghostYPosition[i]+ghostYDirection[i]+18)/19))!=0 &&
+                    mapPacman.GetMap(((ghostXPosition[i]+ghostXDirection[i])/19), ((ghostYPosition[i]+ghostYDirection[i]+18)/19))!=0 &&
+                    mapPacman.GetMap(((ghostXPosition[i]+ghostXDirection[i]+18)/19), ((ghostYPosition[i]+ghostYDirection[i])/19))!=0 ){
+                ghostXPosition[i]+=ghostXDirection[i];
+                ghostYPosition[i]+=ghostYDirection[i];
+                } else {
+                    
+                    ghostXDirection[i] = 0;
+                    ghostYDirection[i] = 0;
+                }
+
             }
+            
+            //wykrywanie  ghostow
+            for (int i = 0; i < 4; i++) {
+                boolean isObstacle = false;
+                if (pacmanXPosition == ghostXPosition[i]) {
+                    if (pacmanYPosition > ghostYPosition[i]) {
+                        int j = ghostYPosition[i];
+                        while (pacmanYPosition > j) {
+                            j++;
+                            if (mapPacman.GetMap(pacmanXPosition / 19, j / 19) == 0) {
+                                isObstacle = true;
+                            }
+                        }
+                    } else {
+                        int j = pacmanYPosition;
+                        while (ghostYPosition[i] > j) {
+                            j++;
+                            if (mapPacman.GetMap(pacmanXPosition / 19, j / 19) == 0) {
+                                isObstacle = true;
+                            }
+                        }
+                    }
+                    if(!isObstacle){
+                        ghostXDirection[i] = 0;
+                        ghostYDirection[i] = pacmanYPosition > ghostYPosition[i]?1:(-1);
+                    }
+
+                }
+                else if (pacmanYPosition == ghostYPosition[i]) {
+                    if (pacmanXPosition > ghostXPosition[i]) {
+                        int j = ghostXPosition[i];
+                        while (pacmanXPosition > j) {
+                            j++;
+                            if (mapPacman.GetMap( j / 19, pacmanYPosition / 19) == 0) {
+                                isObstacle = true;
+                            }
+                        }
+                    } else {
+                        int j = pacmanXPosition;
+                        while (ghostXPosition[i] > j) {
+                            j++;
+                            if (mapPacman.GetMap( j / 19, pacmanYPosition / 19) == 0) {
+                                isObstacle = true;
+                            }
+                        }
+                    }
+                    if(!isObstacle){
+                        ghostXDirection[i] = pacmanXPosition > ghostXPosition[i]?1:(-1);
+                        ghostYDirection[i] = 0;
+                    }
+
+                }
+
+            }
+                // for(int j=0; j<mapPacman.GetHeight(); j++){
+                //     if(pacmanYPosition==ghostYPosition[i] + j){
+                //         ghostXDirection[i]=0; 
+                //         ghostYDirection[i]=-1 ; 
+                //     }
+                //     if(pacmanYPosition==ghostYPosition[i] - j){
+                //         ghostXDirection[i]=0; 
+                //         ghostYDirection[i]=1 ; 
+                //     }
+
+                // }
+                
 
 
         }
         
-        System.out.println("pacmanXpos "+pacmanXpos+" pacmanYpos "+pacmanYpos);
-        System.out.println("pacmanXpos/19 "+pacmanXpos/19+" pacmanYpos/19 "+pacmanYpos/19);
+        System.out.println("pacmanXpos "+pacmanXPosition+" pacmanYPosition "+pacmanYPosition);
+        System.out.println("pacmanXpos/19 "+pacmanXPosition/19+" pacmanYPosition/19 "+pacmanYPosition/19);
         repaint();
     }
 
@@ -180,10 +281,10 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     }
 
     private void TryToChangeDirectionOfPacman(int wantedXDirection, int wantedYDirection){
-        if(mapPacman.GetMap((pacmanXpos+wantedXDirection)/19, (pacmanYpos+wantedYDirection)/19)!=0 &&
-            mapPacman.GetMap(((pacmanXpos+wantedXDirection+18)/19), ((pacmanYpos+wantedYDirection+18)/19))!=0 &&
-            mapPacman.GetMap(((pacmanXpos+wantedXDirection)/19), ((pacmanYpos+wantedYDirection+18)/19))!=0 &&
-            mapPacman.GetMap(((pacmanXpos+wantedXDirection+18)/19), ((pacmanYpos+wantedYDirection)/19))!=0 ){
+        if(mapPacman.GetMap((pacmanXPosition+wantedXDirection)/19, (pacmanYPosition+wantedYDirection)/19)!=0 &&
+            mapPacman.GetMap(((pacmanXPosition+wantedXDirection+18)/19), ((pacmanYPosition+wantedYDirection+18)/19))!=0 &&
+            mapPacman.GetMap(((pacmanXPosition+wantedXDirection)/19), ((pacmanYPosition+wantedYDirection+18)/19))!=0 &&
+            mapPacman.GetMap(((pacmanXPosition+wantedXDirection+18)/19), ((pacmanYPosition+wantedYDirection)/19))!=0 ){
                 pacmanYDirection=wantedYDirection;
                 pacmanXDirection=wantedXDirection;
             }
@@ -193,44 +294,44 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     // @Override
     // public void keyPressed(KeyEvent e) {
     //     int pacmanXSquare = ((pacmanXpos) / 19);
-    //     int pacmanYSquare = ((pacmanYpos) / 19);
+    //     int pacmanYSquare = ((pacmanYPosition) / 19);
 
     //     if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
     //         play=true;
-    //         if(mapPacman.GetMap((pacmanXpos+1)/19, (pacmanYpos)/19)!=0 &&
-    //         mapPacman.GetMap(((pacmanXpos+1+18)/19), ((pacmanYpos+18)/19))!=0 &&
-    //         mapPacman.GetMap(((pacmanXpos+1)/19), ((pacmanYpos+18)/19))!=0 &&
-    //         mapPacman.GetMap(((pacmanXpos+1+18)/19), ((pacmanYpos)/19))!=0 ){
+    //         if(mapPacman.GetMap((pacmanXpos+1)/19, (pacmanYPosition)/19)!=0 &&
+    //         mapPacman.GetMap(((pacmanXpos+1+18)/19), ((pacmanYPosition+18)/19))!=0 &&
+    //         mapPacman.GetMap(((pacmanXpos+1)/19), ((pacmanYPosition+18)/19))!=0 &&
+    //         mapPacman.GetMap(((pacmanXpos+1+18)/19), ((pacmanYPosition)/19))!=0 ){
     //             pacmanXDirection = 1;
     //             pacmanYDirection = 0;
     //         }
     //     }
     //     if (e.getKeyCode() == KeyEvent.VK_LEFT) {
     //         play=true;
-    //         if(mapPacman.GetMap((pacmanXpos-1)/19, (pacmanYpos)/19)!=0 &&
-    //         mapPacman.GetMap(((pacmanXpos-1+18)/19), ((pacmanYpos+18)/19))!=0 &&
-    //         mapPacman.GetMap(((pacmanXpos-1)/19), ((pacmanYpos+18)/19))!=0 &&
-    //         mapPacman.GetMap(((pacmanXpos-1+18)/19), ((pacmanYpos)/19))!=0 ) {
+    //         if(mapPacman.GetMap((pacmanXpos-1)/19, (pacmanYPosition)/19)!=0 &&
+    //         mapPacman.GetMap(((pacmanXpos-1+18)/19), ((pacmanYPosition+18)/19))!=0 &&
+    //         mapPacman.GetMap(((pacmanXpos-1)/19), ((pacmanYPosition+18)/19))!=0 &&
+    //         mapPacman.GetMap(((pacmanXpos-1+18)/19), ((pacmanYPosition)/19))!=0 ) {
     //             pacmanXDirection = -1;
     //             pacmanYDirection = 0;
     //         }
     //     }
     //     if (e.getKeyCode() == KeyEvent.VK_UP) {
     //         play=true;
-    //         if(mapPacman.GetMap((pacmanXpos)/19, (pacmanYpos-1)/19)!=0 &&
-    //         mapPacman.GetMap(((pacmanXpos+18)/19), ((pacmanYpos-1+18)/19))!=0 &&
-    //         mapPacman.GetMap(((pacmanXpos)/19), ((pacmanYpos-1+18)/19))!=0 &&
-    //         mapPacman.GetMap(((pacmanXpos+18)/19), ((pacmanYpos-1)/19))!=0 ) {
+    //         if(mapPacman.GetMap((pacmanXpos)/19, (pacmanYPosition-1)/19)!=0 &&
+    //         mapPacman.GetMap(((pacmanXpos+18)/19), ((pacmanYPosition-1+18)/19))!=0 &&
+    //         mapPacman.GetMap(((pacmanXpos)/19), ((pacmanYPosition-1+18)/19))!=0 &&
+    //         mapPacman.GetMap(((pacmanXpos+18)/19), ((pacmanYPosition-1)/19))!=0 ) {
     //             pacmanXDirection = 0;
     //             pacmanYDirection = -1;
     //         }
     //     }
     //     if (e.getKeyCode() == KeyEvent.VK_DOWN) {
     //         play=true;
-    //         if(mapPacman.GetMap((pacmanXpos)/19, (pacmanYpos+1)/19)!=0 &&
-    //         mapPacman.GetMap(((pacmanXpos+18)/19), ((pacmanYpos+1+18)/19))!=0 &&
-    //         mapPacman.GetMap(((pacmanXpos)/19), ((pacmanYpos+1+18)/19))!=0 &&
-    //         mapPacman.GetMap(((pacmanXpos+18)/19), ((pacmanYpos+1)/19))!=0 ) {
+    //         if(mapPacman.GetMap((pacmanXpos)/19, (pacmanYPosition+1)/19)!=0 &&
+    //         mapPacman.GetMap(((pacmanXpos+18)/19), ((pacmanYPosition+1+18)/19))!=0 &&
+    //         mapPacman.GetMap(((pacmanXpos)/19), ((pacmanYPosition+1+18)/19))!=0 &&
+    //         mapPacman.GetMap(((pacmanXpos+18)/19), ((pacmanYPosition+1)/19))!=0 ) {
     //             pacmanXDirection = 0;
     //             pacmanYDirection = 1;
     //         }
