@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.lang.Object.*;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
@@ -25,6 +26,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private Timer timer;
     private int delay = 20;
     private int cycle = 0;
+    private Random rand = new Random();
 
     private int pacmanXPosition = 0;
     private int pacmanYPosition = 0;
@@ -38,6 +40,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private int ghostYPosition[] = new int[4];
     private int ghostXDirection[] = new int[4];
     private int ghostYDirection[] = new int[4];
+    private int randWandtedGhostXDirection = 0;
+    private int randWandtedGhostYDirection = 0;
 
     private int score = 0;
 
@@ -169,14 +173,10 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             if (cycle % 3 != 0) {
                 // poruszanie sie ghostow
                 for (int i = 0; i < 4; i++) {
-                    if (mapPacman.GetMap((ghostXPosition[i] + ghostXDirection[i]) / 19,
-                            (ghostYPosition[i] + ghostYDirection[i]) / 19) != 0
-                            && mapPacman.GetMap(((ghostXPosition[i] + ghostXDirection[i] + 18) / 19),
-                                    ((ghostYPosition[i] + ghostYDirection[i] + 18) / 19)) != 0
-                            && mapPacman.GetMap(((ghostXPosition[i] + ghostXDirection[i]) / 19),
-                                    ((ghostYPosition[i] + ghostYDirection[i] + 18) / 19)) != 0
-                            && mapPacman.GetMap(((ghostXPosition[i] + ghostXDirection[i] + 18) / 19),
-                                    ((ghostYPosition[i] + ghostYDirection[i]) / 19)) != 0) {
+                    if (       mapPacman.GetMap((ghostXPosition[i] + ghostXDirection[i]) / 19,(ghostYPosition[i] + ghostYDirection[i]) / 19) != 0
+                            && mapPacman.GetMap(((ghostXPosition[i] + ghostXDirection[i] + 18) / 19),((ghostYPosition[i] + ghostYDirection[i] + 18) / 19)) != 0
+                            && mapPacman.GetMap(((ghostXPosition[i] + ghostXDirection[i]) / 19),((ghostYPosition[i] + ghostYDirection[i] + 18) / 19)) != 0
+                            && mapPacman.GetMap(((ghostXPosition[i] + ghostXDirection[i] + 18) / 19),((ghostYPosition[i] + ghostYDirection[i]) / 19)) != 0) {
                         ghostXPosition[i] += ghostXDirection[i];
                         ghostYPosition[i] += ghostYDirection[i];
                     } else {
@@ -186,6 +186,56 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                     }
                 }
             }
+
+            //losowy kierunek poruszania sie ghostow
+            for (int i = 0; i < 4; i++){
+                if((ghostXDirection[i] == 0) && (ghostYDirection[i] == 0)){
+                    while ((ghostXDirection[i] == 0) && (ghostYDirection[i] == 0)) {
+                        int n = rand.nextInt(4) + 1;
+
+                        switch (n) {
+                        case 1:
+                            randWandtedGhostXDirection = 1;
+                            randWandtedGhostYDirection = 0;
+                            break;
+
+                        case 2:
+                            randWandtedGhostXDirection = -1;
+                            randWandtedGhostYDirection = 0;
+                            break;
+
+                        case 3:
+                            randWandtedGhostXDirection = 0;
+                            randWandtedGhostYDirection = 1;
+                            break;
+
+                        case 4:
+                            randWandtedGhostXDirection = 0;
+                            randWandtedGhostYDirection = -1;
+                            break;
+
+                        default:
+                            break;
+                        }
+
+                        if(
+                            mapPacman.GetMap((ghostXPosition[i]+randWandtedGhostXDirection)/19, (ghostYPosition[i]+randWandtedGhostYDirection)/19)!=0 &&
+                            mapPacman.GetMap(((ghostXPosition[i]+randWandtedGhostXDirection+18)/19), ((ghostYPosition[i]+randWandtedGhostYDirection+18)/19))!=0 &&
+                            mapPacman.GetMap(((ghostXPosition[i]+randWandtedGhostXDirection)/19), ((ghostYPosition[i]+randWandtedGhostYDirection+18)/19))!=0 &&
+                            mapPacman.GetMap(((ghostXPosition[i]+randWandtedGhostXDirection+18)/19), ((ghostYPosition[i]+randWandtedGhostYDirection)/19))!=0 ){
+                            ghostYDirection[i]=randWandtedGhostYDirection;
+                            ghostXDirection[i]=randWandtedGhostXDirection;
+                        }
+
+
+
+                    }
+
+
+
+                }
+            }
+            
 
             // wykrywanie ghostow
             for (int i = 0; i < 4; i++) {
