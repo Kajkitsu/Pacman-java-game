@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -12,6 +13,7 @@ public class Map {
     protected int ghostSquareX[] = new int[4];
     protected int ghostSquareY[] = new int[4];
     protected int map[][];
+    protected int scoreMap[][];
 
     public Map(String path) {
         this.pathToMap = path;
@@ -51,6 +53,54 @@ public class Map {
     public int GetMap(int x, int y){
         return this.map[x][y];
     }
+
+    public void MakeScoreMap(){
+        this.scoreMap = new int[this.width][this.height];
+        for (int y = 0; y < this.height; y++)
+        {
+            for (int x = 0; x < this.width; x++){
+                if(map[x][y]==1) this.scoreMap[x][y]=100;
+                else if (map[x][y]==2) this.scoreMap[x][y]=500;
+                else this.scoreMap[x][y]=0;
+                
+            }
+        }
+    }
+
+    public void DrawScoreMap(Graphics g){
+        g.setColor(Color.yellow);
+        for (int y = 0; y < this.height; y++)
+        {
+            for (int x = 0; x < this.width; x++){
+                if(this.scoreMap[x][y]==100) {
+                    g.fillRect(10 + ((x+1) *19 * 2)-21, 10 + ((y+1) * 19 * 2)-21, 4, 4);
+                }
+                else if (this.scoreMap[x][y]==500) {
+                    g.fillRect(10 + ((x+1) *19 * 2)-23, 10 + ((y+1) * 19 * 2)-23, 8, 8);
+                }
+                
+            }
+        }
+
+    }
+
+    public int TakeScoreFrom(int pacmanXposition, int pacmanYposition) {
+        if((pacmanXposition + 6) / 19 == (pacmanXposition + 13) / 19 ){
+            this.scoreMap[(pacmanXposition + 9) / 19][(pacmanYposition + 9) / 19] = 0;
+            return this.scoreMap[(pacmanXposition + 9) / 19][(pacmanYposition + 9) / 19];
+        }
+
+        // if (this.scoreMap[(pacmanXposition + 9) / 19][(pacmanYposition + 9) / 19] > 0 && this.scoreMap[(pacmanXposition + 10) / 19][(pacmanYposition + 10) / 19] > 0 ) {
+        //     this.scoreMap[(pacmanXposition + 9) / 19][(pacmanYposition + 9) / 19] = 0;
+        //     return this.scoreMap[(pacmanXposition + 9) / 19][(pacmanYposition + 9) / 19];
+        // }
+        // if (this.scoreMap[(pacmanXposition + 10) / 19][(pacmanYposition + 10) / 19] > 0) {
+        //     this.scoreMap[(pacmanXposition + 10) / 19][(pacmanYposition + 10) / 19] = 0;
+        //     return this.scoreMap[(pacmanXposition + 10) / 19][(pacmanYposition + 10) / 19];
+        // }
+        return 0;
+    }
+
 
     protected void LoadMap() throws IOException {
         FileReader fileReader = new FileReader(pathToMap);
@@ -479,7 +529,7 @@ public class Map {
                 && this.GetMap(x, y-1)!=0
                 && this.GetMap(x, y+1)!=0
                 ){
-                    g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,211,1,229,20,null);
+                    g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,211,1,230,20,null);
                 }
                 //koniec od lewej strony
                 if (this.GetMap(x, y) == 0

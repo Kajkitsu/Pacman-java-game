@@ -1,5 +1,6 @@
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,10 +23,12 @@ import javax.swing.Timer;
 
 public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private boolean play = false;
+    private boolean killed = false;
 
     private Timer timer;
     private int delay = 30;
     private int cycle = 0;
+    private int grapCycyle =1;
 
     private Pacman pacmanPlayer;
     private Ghost ghost[] = new Ghost[4];
@@ -53,6 +56,10 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         } catch (IOException e) {
         }
 
+
+        //tworzenie mapy punktow
+        mapPacman.MakeScoreMap();
+
         timer = new Timer(delay, this);
         timer.start();
 
@@ -63,13 +70,18 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             ghost[i] = new Ghost(mapPacman.GetGhostSquareX(i) *19 ,mapPacman.GetGhostSquareY(i)*19,mapPacman,pacmanPlayer);
             ghost[i].ChangeToRandomDirection();
         }
-        play = true;
-        System.out.println("Koniec Gameplay()");
+        // System.out.println("Koniec Gameplay()");
 
     }
 
     public void paint(Graphics g) {
-        System.out.println("paint()");
+
+        // System.out.println("paint()");
+
+        if(cycle==1){
+            grapCycyle++;
+        }
+        if (grapCycyle==7) grapCycyle=1;
 
         // backgorund
         g.setColor(Color.black);
@@ -80,18 +92,36 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         // Rysowanie mapy
         mapPacman.DrawMap(g, pacmanIconImg);
 
+        //Rysowanie mapy punktow
+        mapPacman.DrawScoreMap(g);
 
-        // Rysowanie pacmana 
 
         // Rysowanie pacmana
-        g.setColor(Color.yellow);
-        g.fillRect(10 + pacmanPlayer.GetXPosition() * 2, 10 + pacmanPlayer.GetYPosition() * 2, 19 * 2, 19 * 2);
+        pacmanPlayer.DrawPacman(grapCycyle, pacmanIconImg, g); 
+
+
+        //Rysowanie Ghostow
+        for (int i = 0; i < 4; i++) {
+            ghost[i].DrawGhost(grapCycyle, pacmanIconImg, g, i);
+        }
+
+        //czy zabity
+        if(killed){
+            g.setColor(Color.red);
+            g.setFont(new Font(null, Font.BOLD,40));
+            g.drawString("GAME OVER", 10+(mapPacman.GetWidth()*19)/2, 10+mapPacman.GetHeight()*19);
+        }
+
+
+        // Rysowanie pacmana
+        // g.setColor(Color.yellow);
+        // g.fillRect(10 + pacmanPlayer.GetXPosition() * 2, 10 + pacmanPlayer.GetYPosition() * 2, 19 * 2, 19 * 2);
 
         // Rysowanie Ghostow
-        g.setColor(Color.pink);
-        for (int i = 0; i < 4; i++) {
-            g.fillRect(10 + ghost[i].GetXPosition() * 2, 10 + ghost[i].GetYPosition() * 2, 19 * 2, 19 * 2);
-        }
+        // g.setColor(Color.pink);
+        // for (int i = 0; i < 4; i++) {
+        //     g.fillRect(10 + ghost[i].GetXPosition() * 2, 10 + ghost[i].GetYPosition() * 2, 19 * 2, 19 * 2);
+        // }
 
         /*
          * // boredrs g.setColor(Color.yellow); g.fillRect(0, 0, 3, 592); g.fillRect(0,
@@ -119,13 +149,13 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
          */
 
         // siatka do Debugowania
-        g.setColor(Color.white);
-        for (int i = 0; i < mapPacman.GetHeight() + 19 * 2 + 60; i++) {
-            g.fillRect(10, 9 + (i * 19 * 2), mapPacman.GetWidth() * 2 * 19, 2);
-        }
-        for (int i = 0; i < mapPacman.GetWidth() + 19 * 2; i++) {
-            g.fillRect(9 + (i * 19 * 2), 10, 2, mapPacman.GetHeight() * 2 * 19);
-        }
+        // g.setColor(Color.white);
+        // for (int i = 0; i < mapPacman.GetHeight() + 19 * 2 + 60; i++) {
+        //     g.fillRect(10, 9 + (i * 19 * 2), mapPacman.GetWidth() * 2 * 19, 2);
+        // }
+        // for (int i = 0; i < mapPacman.GetWidth() + 19 * 2; i++) {
+        //     g.fillRect(9 + (i * 19 * 2), 10, 2, mapPacman.GetHeight() * 2 * 19);
+        // }
 
         g.dispose();
 
@@ -133,11 +163,11 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("void actionPerformed(ActionEvent e)");
+        // System.out.println("void actionPerformed(ActionEvent e)");
         timer.start();
 
-        if (play) {
-            System.out.println("play=true");
+        if (play && !killed) {
+            // System.out.println("play=true");
             pacmanPlayer.TryToChangeDirectionOfPacman(wantedXDirection, wantedYDirection);
 
             cycle++;
@@ -148,11 +178,19 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
             pacmanPlayer.MovePacman();
 
+            score=score+mapPacman.TakeScoreFrom(pacmanPlayer.GetXPosition(), pacmanPlayer.GetYPosition());
+
+
             // ograniczone cyklami gry
             if (cycle % 3 != 0) {
                 // poruszanie sie ghostow
                 for (int i = 0; i < 4; i++) {
                     ghost[i].MoveGhost();
+                    if(ghost[i].TryToKill(pacmanPlayer)){
+                        killed=true;
+                        play=false;
+                        break;
+                    }
 
                 }
             }
@@ -166,9 +204,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
         //System.out.println("pacmanXpos " + pacmanXPosition + " pacmanYPosition " + pacmanYPosition);
         //System.out.println("pacmanXpos/19 " + pacmanXPosition / 19 + " pacmanYPosition/19 " + pacmanYPosition / 19);
-        System.out.println("repaint()");
-        repaint();
-        System.out.println("after repaint()");
+        // System.out.println("repaint()");
+        if(!killed) repaint();
+        // System.out.println("after repaint()");
     }
 
     @Override
@@ -182,25 +220,25 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             wantedXDirection=1;
             wantedYDirection=0;
-            play=true;
+            // play=true;
 
         }
         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             wantedXDirection=-1;
             wantedYDirection=0;
-            play=true;
+            // play=true;
 
         }
         if (e.getKeyCode() == KeyEvent.VK_UP) {
             wantedXDirection=0;
             wantedYDirection=-1;
-            play=true;
+            // play=true;
 
         }
         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
             wantedXDirection=0;
             wantedYDirection=1;
-            play=true;
+            // play=true;
 
         }
         
@@ -208,6 +246,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_SPACE && !killed){
+            play=true;
+        }
 
 
     }

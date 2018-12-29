@@ -1,3 +1,6 @@
+import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class Ghost {
@@ -30,6 +33,22 @@ public class Ghost {
 
     public int GetYPosition() {
         return this.ghostYPosition;
+    }
+
+    public void DrawGhost(int grapCycle, BufferedImage pacmanIconImg, Graphics g, int color){
+
+        if(this.ghostXDirection == 0 && this.ghostYDirection==-1){
+            g.drawImage(pacmanIconImg, 10 + this.GetXPosition()*2, 10 + this.GetYPosition() *2, 10 + this.GetXPosition()*2 + 2 * 19, 10 + this.GetYPosition() *2 + 2 * 19,1+(grapCycle%2*21),85+(color*21),20+(grapCycle%2*21),104+(color*21),null);
+        }
+        if(this.ghostXDirection == 0 && this.ghostYDirection==1){
+            g.drawImage(pacmanIconImg, 10 + this.GetXPosition()*2, 10 + this.GetYPosition() *2, 10 + this.GetXPosition()*2 + 2 * 19, 10 + this.GetYPosition() *2 + 2 * 19,44+(grapCycle%2*21),85+(color*21),61+(grapCycle%2*21),104+(color*21),null);
+        }
+        if(this.ghostXDirection != 1 && this.ghostYDirection==0){
+            g.drawImage(pacmanIconImg, 10 + this.GetXPosition()*2, 10 + this.GetYPosition() *2, 10 + this.GetXPosition()*2 + 2 * 19, 10 + this.GetYPosition() *2 + 2 * 19,85+(grapCycle%2*21),85+(color*21),104+(grapCycle%2*21),104+(color*21),null);
+        }
+        if(this.ghostXDirection == 1 && this.ghostYDirection==0){
+            g.drawImage(pacmanIconImg, 10 + this.GetXPosition()*2, 10 + this.GetYPosition() *2, 10 + this.GetXPosition()*2 + 2 * 19, 10 + this.GetYPosition() *2 + 2 * 19,127+(grapCycle%2*21),85+(color*21),146+(grapCycle%2*21),104+(color*21),null);
+        }
     }
 
     public void MoveGhost() {
@@ -99,6 +118,18 @@ public class Ghost {
             }
 
         }
+
+    }
+
+    public boolean TryToKill(Pacman pacman){
+        Rectangle rectPac = new Rectangle(pacman.GetXPosition()-2,pacman.GetYPosition()-2,15,15);
+        Rectangle rectGhost = new Rectangle(this.GetXPosition()-2,this.GetYPosition()-2,15,15);
+
+        
+        if(rectGhost.intersects(rectPac)){
+            return true;            
+        }
+        else return false;
 
     }
 
