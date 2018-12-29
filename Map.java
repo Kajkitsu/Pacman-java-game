@@ -67,6 +67,17 @@ public class Map {
         }
     }
 
+    public boolean CheckIsScoreMapEmpty(){
+        for (int y = 0; y < this.height; y++)
+        {
+            for (int x = 0; x < this.width; x++){
+                if(this.scoreMap[x][y]>0) return false; 
+            }
+        }
+        return true;
+
+    }
+
     public void DrawScoreMap(Graphics g){
         g.setColor(Color.yellow);
         for (int y = 0; y < this.height; y++)
@@ -86,8 +97,9 @@ public class Map {
 
     public int TakeScoreFrom(int pacmanXposition, int pacmanYposition) {
         if((pacmanXposition + 6) / 19 == (pacmanXposition + 13) / 19 ){
+            int points=this.scoreMap[(pacmanXposition + 9) / 19][(pacmanYposition + 9) / 19];
             this.scoreMap[(pacmanXposition + 9) / 19][(pacmanYposition + 9) / 19] = 0;
-            return this.scoreMap[(pacmanXposition + 9) / 19][(pacmanYposition + 9) / 19];
+            return points;
         }
 
         // if (this.scoreMap[(pacmanXposition + 9) / 19][(pacmanYposition + 9) / 19] > 0 && this.scoreMap[(pacmanXposition + 10) / 19][(pacmanYposition + 10) / 19] > 0 ) {

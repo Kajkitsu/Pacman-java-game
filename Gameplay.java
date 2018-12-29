@@ -19,14 +19,17 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import jdk.nashorn.internal.ir.Flags;
+
 //import com.sun.corba.se.spi.orbutil.fsm.Action;
 
 public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private boolean play = false;
     private boolean killed = false;
+    private boolean win = false;
 
     private Timer timer;
-    private int delay = 30;
+    private int delay = 20;
     private int cycle = 0;
     private int grapCycyle =1;
 
@@ -89,6 +92,11 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         g.setColor(Color.gray);
         g.fillRect(10, 10, mapPacman.GetWidth() * 19 * 2, mapPacman.GetHeight() * 2 * 19);
 
+        // Wypisanie punktow
+        g.setColor(Color.white);
+        g.setFont(new Font(null, Font.BOLD, 40));
+        g.drawString("Score: "+score, 10 , mapPacman.GetHeight() * 2 * 19 + 50 );
+
         // Rysowanie mapy
         mapPacman.DrawMap(g, pacmanIconImg);
 
@@ -108,10 +116,18 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         //czy zabity
         if(killed){
             g.setColor(Color.red);
-            g.setFont(new Font(null, Font.BOLD,40));
-            g.drawString("GAME OVER", 10+(mapPacman.GetWidth()*19)/2, 10+mapPacman.GetHeight()*19);
+            g.setFont(new Font(null, Font.BOLD,60));
+            g.drawString("GAME OVER", 10+(mapPacman.GetWidth()*19)/2-30, 10+mapPacman.GetHeight()*19);
         }
 
+        //czy wygrana
+        if(win){
+            g.setColor(Color.green);
+            g.setFont(new Font(null, Font.BOLD,60));
+            g.drawString("YOU WIN!", 10+(mapPacman.GetWidth()*19)/2-30, 10+mapPacman.GetHeight()*19);
+        }
+
+        
 
         // Rysowanie pacmana
         // g.setColor(Color.yellow);
@@ -198,6 +214,13 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             // wykrywanie ghostow
             for (int i = 0; i < 4; i++)
                 ghost[i].DetectPacman();
+            
+            if(mapPacman.CheckIsScoreMapEmpty()){
+                win=true;
+                play=false;
+            }
+
+            repaint();
 
 
         }
