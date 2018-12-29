@@ -75,6 +75,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             ghost[i].ChangeToRandomDirection();
         }
         // System.out.println("Koniec Gameplay()");
+        
 
     }
 
@@ -126,6 +127,13 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             g.setColor(Color.green);
             g.setFont(new Font(null, Font.BOLD,60));
             g.drawString("YOU WIN!", 10+(mapPacman.GetWidth()*19)/2-30, 10+mapPacman.GetHeight()*19);
+        }
+
+        //czy pasua
+        if(!play && !killed){
+            g.setColor(Color.magenta);
+            g.setFont(new Font(null, Font.BOLD,60));
+            g.drawString("PAUSA", 10+(mapPacman.GetWidth()*19)/2-30, 10+mapPacman.GetHeight()*19);
         }
 
         
@@ -209,7 +217,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
             // ograniczone cyklami gry
             //if (cycle % 3 != 0)
-            if (1) {
+            if (true) {
                 // poruszanie sie ghostow
                 for (int i = 0; i < 4; i++) {
                     ghost[i].MoveGhost();
@@ -281,7 +289,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SPACE && !killed){
-            play=true;
+            play=!play;
         }
 
 
