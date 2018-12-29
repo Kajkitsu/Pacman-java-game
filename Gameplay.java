@@ -208,7 +208,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             }
 
             // ograniczone cyklami gry
-            if (cycle % 3 != 0) {
+            //if (cycle % 3 != 0)
+            if (1) {
                 // poruszanie sie ghostow
                 for (int i = 0; i < 4; i++) {
                     ghost[i].MoveGhost();
