@@ -9,6 +9,7 @@ public class Ghost {
     private int ghostXDirection = 0;
     private int ghostYDirection = 0;
     private Random rand = new Random();
+    public boolean isAlive=true;
 
     private Map mapPacman = null;
     private Pacman pacmanPlayer = null;
@@ -35,48 +36,80 @@ public class Ghost {
         return this.ghostYPosition;
     }
 
-    public void DrawGhost(int grapCycle, BufferedImage pacmanIconImg, Graphics g, int color){
+    public void DrawGhost(int grapCycle, BufferedImage pacmanIconImg, Graphics g, int color, int timeToDay){
+        if(timeToDay==0 && this.isAlive){
+            if(this.ghostXDirection == 0 && this.ghostYDirection==-1){
+                g.drawImage(pacmanIconImg, 10 + this.GetXPosition()*2, 10 + this.GetYPosition() *2, 10 + this.GetXPosition()*2 + 2 * 19, 10 + this.GetYPosition() *2 + 2 * 19,1+(grapCycle%2*21),85+(color*21),20+(grapCycle%2*21),104+(color*21),null);
+            }
+            if(this.ghostXDirection == 0 && this.ghostYDirection==1){
+                g.drawImage(pacmanIconImg, 10 + this.GetXPosition()*2, 10 + this.GetYPosition() *2, 10 + this.GetXPosition()*2 + 2 * 19, 10 + this.GetYPosition() *2 + 2 * 19,44+(grapCycle%2*21),85+(color*21),61+(grapCycle%2*21),104+(color*21),null);
+            }
+            if(this.ghostXDirection != 1 && this.ghostYDirection==0){
+                g.drawImage(pacmanIconImg, 10 + this.GetXPosition()*2, 10 + this.GetYPosition() *2, 10 + this.GetXPosition()*2 + 2 * 19, 10 + this.GetYPosition() *2 + 2 * 19,85+(grapCycle%2*21),85+(color*21),104+(grapCycle%2*21),104+(color*21),null);
+            }
+            if(this.ghostXDirection == 1 && this.ghostYDirection==0){
+                g.drawImage(pacmanIconImg, 10 + this.GetXPosition()*2, 10 + this.GetYPosition() *2, 10 + this.GetXPosition()*2 + 2 * 19, 10 + this.GetYPosition() *2 + 2 * 19,127+(grapCycle%2*21),85+(color*21),146+(grapCycle%2*21),104+(color*21),null);
+            }
+        }
+        else if(timeToDay<50 && this.isAlive){
+            if(this.ghostXDirection == 0 && this.ghostYDirection==-1){
+                g.drawImage(pacmanIconImg, 10 + this.GetXPosition()*2, 10 + this.GetYPosition() *2, 10 + this.GetXPosition()*2 + 2 * 19, 10 + this.GetYPosition() *2 + 2 * 19,1+(grapCycle%4*21),169,20+(grapCycle%4*21),188,null);
+            }
+            if(this.ghostXDirection == 0 && this.ghostYDirection==1){
+                g.drawImage(pacmanIconImg, 10 + this.GetXPosition()*2, 10 + this.GetYPosition() *2, 10 + this.GetXPosition()*2 + 2 * 19, 10 + this.GetYPosition() *2 + 2 * 19,1+(grapCycle%4*21),169,20+(grapCycle%4*21),188,null);
+            }
+            if(this.ghostXDirection != 1 && this.ghostYDirection==0){
+                g.drawImage(pacmanIconImg, 10 + this.GetXPosition()*2, 10 + this.GetYPosition() *2, 10 + this.GetXPosition()*2 + 2 * 19, 10 + this.GetYPosition() *2 + 2 * 19,1+(grapCycle%4*21),169,20+(grapCycle%4*21),188,null);
+            }
+            if(this.ghostXDirection == 1 && this.ghostYDirection==0){
+                g.drawImage(pacmanIconImg, 10 + this.GetXPosition()*2, 10 + this.GetYPosition() *2, 10 + this.GetXPosition()*2 + 2 * 19, 10 + this.GetYPosition() *2 + 2 * 19,1+(grapCycle%4*21),169,20+(grapCycle%4*21),188,null);
+            }
+        }
+        else if(timeToDay>0 && this.isAlive){
+            if(this.ghostXDirection == 0 && this.ghostYDirection==-1){
+                g.drawImage(pacmanIconImg, 10 + this.GetXPosition()*2, 10 + this.GetYPosition() *2, 10 + this.GetXPosition()*2 + 2 * 19, 10 + this.GetYPosition() *2 + 2 * 19,1+(grapCycle%2*21),169,20+(grapCycle%2*21),188,null);
+            }
+            if(this.ghostXDirection == 0 && this.ghostYDirection==1){
+                g.drawImage(pacmanIconImg, 10 + this.GetXPosition()*2, 10 + this.GetYPosition() *2, 10 + this.GetXPosition()*2 + 2 * 19, 10 + this.GetYPosition() *2 + 2 * 19,1+(grapCycle%2*21),169,20+(grapCycle%2*21),188,null);
+            }
+            if(this.ghostXDirection != 1 && this.ghostYDirection==0){
+                g.drawImage(pacmanIconImg, 10 + this.GetXPosition()*2, 10 + this.GetYPosition() *2, 10 + this.GetXPosition()*2 + 2 * 19, 10 + this.GetYPosition() *2 + 2 * 19,1+(grapCycle%2*21),169,20+(grapCycle%2*21),188,null);
+            }
+            if(this.ghostXDirection == 1 && this.ghostYDirection==0){
+                g.drawImage(pacmanIconImg, 10 + this.GetXPosition()*2, 10 + this.GetYPosition() *2, 10 + this.GetXPosition()*2 + 2 * 19, 10 + this.GetYPosition() *2 + 2 * 19,1+(grapCycle%2*21),169,20+(grapCycle%2*21),188,null);
+            }
+        }
 
-        if(this.ghostXDirection == 0 && this.ghostYDirection==-1){
-            g.drawImage(pacmanIconImg, 10 + this.GetXPosition()*2, 10 + this.GetYPosition() *2, 10 + this.GetXPosition()*2 + 2 * 19, 10 + this.GetYPosition() *2 + 2 * 19,1+(grapCycle%2*21),85+(color*21),20+(grapCycle%2*21),104+(color*21),null);
-        }
-        if(this.ghostXDirection == 0 && this.ghostYDirection==1){
-            g.drawImage(pacmanIconImg, 10 + this.GetXPosition()*2, 10 + this.GetYPosition() *2, 10 + this.GetXPosition()*2 + 2 * 19, 10 + this.GetYPosition() *2 + 2 * 19,44+(grapCycle%2*21),85+(color*21),61+(grapCycle%2*21),104+(color*21),null);
-        }
-        if(this.ghostXDirection != 1 && this.ghostYDirection==0){
-            g.drawImage(pacmanIconImg, 10 + this.GetXPosition()*2, 10 + this.GetYPosition() *2, 10 + this.GetXPosition()*2 + 2 * 19, 10 + this.GetYPosition() *2 + 2 * 19,85+(grapCycle%2*21),85+(color*21),104+(grapCycle%2*21),104+(color*21),null);
-        }
-        if(this.ghostXDirection == 1 && this.ghostYDirection==0){
-            g.drawImage(pacmanIconImg, 10 + this.GetXPosition()*2, 10 + this.GetYPosition() *2, 10 + this.GetXPosition()*2 + 2 * 19, 10 + this.GetYPosition() *2 + 2 * 19,127+(grapCycle%2*21),85+(color*21),146+(grapCycle%2*21),104+(color*21),null);
-        }
+        
     }
 
-
-
-
     public void MoveGhost() {
-    
+        if (this.isAlive) {
+            if (this.mapPacman.GetMap((this.ghostXPosition + this.ghostXDirection) / 19,
+                    (this.ghostYPosition + this.ghostYDirection) / 19) != 0
+                    && this.mapPacman.GetMap(((this.ghostXPosition + this.ghostXDirection + 18) / 19),
+                            ((this.ghostYPosition + this.ghostYDirection + 18) / 19)) != 0
+                    && this.mapPacman.GetMap(((this.ghostXPosition + this.ghostXDirection) / 19),
+                            ((this.ghostYPosition + this.ghostYDirection + 18) / 19)) != 0
+                    && this.mapPacman.GetMap(((this.ghostXPosition + this.ghostXDirection + 18) / 19),
+                            ((this.ghostYPosition + this.ghostYDirection) / 19)) != 0) {
+                this.ghostXPosition += this.ghostXDirection;
+                this.ghostYPosition += this.ghostYDirection;
 
-        if (this.mapPacman.GetMap((this.ghostXPosition + this.ghostXDirection) / 19, (this.ghostYPosition + this.ghostYDirection) / 19) != 0
-                && this.mapPacman.GetMap(((this.ghostXPosition + this.ghostXDirection + 18) / 19), ((this.ghostYPosition + this.ghostYDirection + 18) / 19)) != 0
-                && this.mapPacman.GetMap(((this.ghostXPosition + this.ghostXDirection) / 19), ((this.ghostYPosition + this.ghostYDirection + 18) / 19)) != 0
-                && this.mapPacman.GetMap(((this.ghostXPosition + this.ghostXDirection + 18) / 19), ((this.ghostYPosition + this.ghostYDirection) / 19)) != 0) {
-            this.ghostXPosition += this.ghostXDirection;
-            this.ghostYPosition += this.ghostYDirection;
+            } else {
+                this.ghostXDirection = 0;
+                this.ghostYDirection = 0;
+                this.ChangeToRandomDirection();
+                this.MoveGhost();
 
-        } else {
-            this.ghostXDirection=0;
-            this.ghostYDirection=0;
-            this.ChangeToRandomDirection();
-            this.MoveGhost();
-
+            }
         }
     }
 
     public void DetectPacman() {
         boolean isObstacle = false;
 
-        if (this.pacmanPlayer.GetXPosition() == this.ghostXPosition) {
+        if (this.pacmanPlayer.GetXPosition() == this.ghostXPosition && this.isAlive) {
             if (this.pacmanPlayer.GetYPosition() > this.ghostYPosition) {
                 int j = this.ghostYPosition;
                 while (this.pacmanPlayer.GetYPosition() > j) {
@@ -99,7 +132,7 @@ public class Ghost {
                 this.ghostYDirection = this.pacmanPlayer.GetYPosition() > this.ghostYPosition ? 1 : (-1);
             }
 
-        } else if (this.pacmanPlayer.GetYPosition() == this.ghostYPosition) {
+        } else if (this.pacmanPlayer.GetYPosition() == this.ghostYPosition && this.isAlive) {
             if (this.pacmanPlayer.GetXPosition() > this.ghostXPosition) {
                 int j = this.ghostXPosition;
                 while (this.pacmanPlayer.GetXPosition() > j) {
@@ -131,7 +164,7 @@ public class Ghost {
         Rectangle rectGhost = new Rectangle(this.GetXPosition()-2,this.GetYPosition()-2,15,15);
 
         
-        if(rectGhost.intersects(rectPac)){
+        if(rectGhost.intersects(rectPac) && this.isAlive){
             return true;            
         }
         else return false;
@@ -143,7 +176,7 @@ public class Ghost {
         int randWandtedGhostYDirection = 0;
         int n = 0;
 
-        while ((this.ghostXDirection == 0) && (this.ghostYDirection == 0)) {
+        while ((this.ghostXDirection == 0) && (this.ghostYDirection == 0) &&  this.isAlive) {
             n = rand.nextInt(4) + 1;
 
             switch (n) {

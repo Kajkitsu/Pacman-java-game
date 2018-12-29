@@ -1,4 +1,5 @@
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 public class Pacman  {
@@ -104,5 +105,18 @@ public class Pacman  {
             }
     }
     
+    public boolean TryToKill(Ghost ghost){
 
+        Rectangle rectPac = new Rectangle(this.GetXPosition()-2,this.GetYPosition()-2,15,15);
+        Rectangle rectGhost = new Rectangle(ghost.GetXPosition()-2,ghost.GetYPosition()-2,15,15);
+
+
+        
+        if(rectGhost.intersects(rectPac) && ghost.isAlive){
+            ghost.isAlive=false;
+            return true;            
+        }
+        else return false;
+
+    }
 }

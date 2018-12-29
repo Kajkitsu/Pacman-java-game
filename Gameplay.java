@@ -32,6 +32,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private int delay = 20;
     private int cycle = 0;
     private int grapCycyle =1;
+    private int timeForEat=0;
 
     private Pacman pacmanPlayer;
     private Ghost ghost[] = new Ghost[4];
@@ -110,7 +111,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
         //Rysowanie Ghostow
         for (int i = 0; i < 4; i++) {
-            ghost[i].DrawGhost(grapCycyle, pacmanIconImg, g, i);
+            ghost[i].DrawGhost(grapCycyle, pacmanIconImg, g, i, timeForEat);
         }
 
         //czy zabity
@@ -194,15 +195,24 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
             pacmanPlayer.MovePacman();
 
-            score=score+mapPacman.TakeScoreFrom(pacmanPlayer.GetXPosition(), pacmanPlayer.GetYPosition());
-
+            int points = mapPacman.TakeScoreFrom(pacmanPlayer.GetXPosition(), pacmanPlayer.GetYPosition());
+            if(points == 500) {
+                timeForEat=250;
+            }
+            score=points+score;
+            if(timeForEat>0) {
+                for(int i=0; i < 4; i++){
+                    if(pacmanPlayer.TryToKill(ghost[i])) score=score+1000;
+                }
+                timeForEat--;
+            }
 
             // ograniczone cyklami gry
             if (cycle % 3 != 0) {
                 // poruszanie sie ghostow
                 for (int i = 0; i < 4; i++) {
                     ghost[i].MoveGhost();
-                    if(ghost[i].TryToKill(pacmanPlayer)){
+                    if(ghost[i].TryToKill(pacmanPlayer) && timeForEat==0){
                         killed=true;
                         play=false;
                         break;
