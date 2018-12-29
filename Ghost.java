@@ -160,8 +160,8 @@ public class Ghost {
     }
 
     public boolean TryToKill(Pacman pacman){
-        Rectangle rectPac = new Rectangle(pacman.GetXPosition()-2,pacman.GetYPosition()-2,15,15);
-        Rectangle rectGhost = new Rectangle(this.GetXPosition()-2,this.GetYPosition()-2,15,15);
+        Rectangle rectPac = new Rectangle(pacman.GetXPosition()-3,pacman.GetYPosition()-3,13,13);
+        Rectangle rectGhost = new Rectangle(this.GetXPosition()-3,this.GetYPosition()-3,13,13);
 
         
         if(rectGhost.intersects(rectPac) && this.isAlive){

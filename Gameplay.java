@@ -15,13 +15,10 @@ import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 
-//import javax.management.timer.Timer;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import jdk.nashorn.internal.ir.Flags;
-
-//import com.sun.corba.se.spi.orbutil.fsm.Action;
+//import jdk.nashorn.internal.ir.Flags;
 
 public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private boolean play = false;
@@ -83,7 +80,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
         // System.out.println("paint()");
 
-        if(cycle==1){
+        if(cycle%3==0){
             grapCycyle++;
         }
         if (grapCycyle==7) grapCycyle=1;
@@ -196,12 +193,12 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             pacmanPlayer.TryToChangeDirectionOfPacman(wantedXDirection, wantedYDirection);
 
             cycle++;
-            if (cycle == 4)
-                cycle = 1;
+            if (cycle == 8)
+                cycle = 0;
 
             // poruszanie sie pacmana
 
-            pacmanPlayer.MovePacman();
+            if(cycle!=0) pacmanPlayer.MovePacman();
 
             int points = mapPacman.TakeScoreFrom(pacmanPlayer.GetXPosition(), pacmanPlayer.GetYPosition());
             if(points == 500) {
@@ -231,9 +228,10 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             }
 
             // wykrywanie ghostow
-            for (int i = 0; i < 4; i++)
-                ghost[i].DetectPacman();
-            
+            if (timeForEat == 0)
+                for (int i = 0; i < 4; i++)
+                    ghost[i].DetectPacman();
+
             if(mapPacman.CheckIsScoreMapEmpty()){
                 win=true;
                 play=false;
