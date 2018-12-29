@@ -24,7 +24,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private boolean play = false;
 
     private Timer timer;
-    private int delay = 15;
+    private int delay = 30;
     private int cycle = 0;
 
     private Pacman pacmanPlayer;
@@ -59,12 +59,18 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
        
         //tworzenie Pacmana i Ghostow
         pacmanPlayer = new Pacman(mapPacman.GetPacmanSquareX() * 19,mapPacman.GetPacmanSquareY() * 19,mapPacman);
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++){
             ghost[i] = new Ghost(mapPacman.GetGhostSquareX(i) *19 ,mapPacman.GetGhostSquareY(i)*19,mapPacman,pacmanPlayer);
+            ghost[i].ChangeToRandomDirection();
+        }
+        play = true;
+        System.out.println("Koniec Gameplay()");
 
     }
 
     public void paint(Graphics g) {
+        System.out.println("paint()");
+
         // backgorund
         g.setColor(Color.black);
         g.fillRect(0, 0, mapPacman.GetWidth() * 19 * 2 + 20, mapPacman.GetHeight() * 2 * 19 + 100);
@@ -73,6 +79,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
         // Rysowanie mapy
         mapPacman.DrawMap(g, pacmanIconImg);
+
+
+        // Rysowanie pacmana 
 
         // Rysowanie pacmana
         g.setColor(Color.yellow);
@@ -124,9 +133,11 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        System.out.println("void actionPerformed(ActionEvent e)");
         timer.start();
 
         if (play) {
+            System.out.println("play=true");
             pacmanPlayer.TryToChangeDirectionOfPacman(wantedXDirection, wantedYDirection);
 
             cycle++;
@@ -155,7 +166,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
         //System.out.println("pacmanXpos " + pacmanXPosition + " pacmanYPosition " + pacmanYPosition);
         //System.out.println("pacmanXpos/19 " + pacmanXPosition / 19 + " pacmanYPosition/19 " + pacmanYPosition / 19);
+        System.out.println("repaint()");
         repaint();
+        System.out.println("after repaint()");
     }
 
     @Override

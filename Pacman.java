@@ -27,6 +27,8 @@ public class Pacman  {
         return this.pacmanYPosition;
     }
 
+    public DrawPacman()
+
     public void TryToChangeDirectionOfPacman(int wantedXDirection, int wantedYDirection){
         if(this.mapPacman.GetMap((this.pacmanXPosition+wantedXDirection)/19, (this.pacmanYPosition+wantedYDirection)/19)!=0 &&
             this.mapPacman.GetMap(((this.pacmanXPosition+wantedXDirection+18)/19), ((this.pacmanYPosition+wantedYDirection+18)/19))!=0 &&

@@ -64,8 +64,8 @@ public class Map {
         // wczytanie wyskosci i szerokosci
         for (i = 0; i < readedLine.length(); i++) {
             if (readedLine.charAt(i) != ' ') {
-                this.height = this.height * 10;
-                this.height += readedLine.charAt(i) - 48;
+                this.width = this.width * 10;
+                this.width += readedLine.charAt(i) - 48;
             } else {
 
                 i++;
@@ -74,8 +74,8 @@ public class Map {
         }
         for (; i < readedLine.length(); i++)
             if (readedLine.charAt(i) != ' ') {
-                this.width = this.width * 10;
-                this.width += readedLine.charAt(i) - 48;
+                this.height = this.height * 10;
+                this.height += readedLine.charAt(i) - 48;
             } else {
 
                 i++;
@@ -387,7 +387,7 @@ public class Map {
         }
 
         //pasek prawy
-        for (int y = 1,x = this.GetHeight()-1; y < this.GetHeight()-1; y++){
+        for (int y = 1,x = this.GetWidth()-1; y < this.GetHeight()-1; y++){
             if (this.GetMap(x, y) != 0) {
                 g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,190,22,209,41,null);
             }
@@ -479,7 +479,7 @@ public class Map {
                 && this.GetMap(x, y-1)!=0
                 && this.GetMap(x, y+1)!=0
                 ){
-                    g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,85,22,104,41,null);
+                    g.drawImage(pacmanIconImg, 10+(x*19)*2, 10+(y*19)*2, 10+((x+1)*19)*2, 10+((y+1)*19)*2,211,1,229,20,null);
                 }
                 //koniec od lewej strony
                 if (this.GetMap(x, y) == 0
