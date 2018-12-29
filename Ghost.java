@@ -51,7 +51,12 @@ public class Ghost {
         }
     }
 
+
+
+
     public void MoveGhost() {
+    
+
         if (this.mapPacman.GetMap((this.ghostXPosition + this.ghostXDirection) / 19, (this.ghostYPosition + this.ghostYDirection) / 19) != 0
                 && this.mapPacman.GetMap(((this.ghostXPosition + this.ghostXDirection + 18) / 19), ((this.ghostYPosition + this.ghostYDirection + 18) / 19)) != 0
                 && this.mapPacman.GetMap(((this.ghostXPosition + this.ghostXDirection) / 19), ((this.ghostYPosition + this.ghostYDirection + 18) / 19)) != 0
