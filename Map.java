@@ -29,8 +29,14 @@ public class Map {
     public Map() {
         System.out.println("Podaj sciezke bo pliku konfiguracyjnego mapy: ");
         Scanner odczyt = new Scanner(System.in);
-        pathToMap = odczyt.nextLine();
+        this.pathToMap = odczyt.nextLine();
+        System.out.println(this.pathToMap);
         odczyt.close();
+        try {
+            this.LoadMap();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -182,7 +188,6 @@ public class Map {
 
         }
 
-        
         // wczytanie mapy
         this.map = new int[this.width][this.height];
         for (int y = 0; y < this.height; y++) {
@@ -192,7 +197,7 @@ public class Map {
             }
         }
         this.pathToImgOfMap = bufferedReader.readLine();
-        bufferedReader.close();        
+        bufferedReader.close();
     }
 
     public void DrawMap(Graphics g, BufferedImage pacmanIconImg) {
