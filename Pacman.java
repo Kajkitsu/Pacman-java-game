@@ -89,7 +89,20 @@ public class Pacman  {
     }
 
     public void MovePacman(){
-        if (this.mapPacman.GetMap((this.pacmanXPosition + this.pacmanXDirection) / 19,
+        System.out.println("xposition "+this.pacmanXPosition);
+        System.out.println("xposition "+this.pacmanXPosition/19);
+        System.out.println("xposition "+(this.pacmanXPosition+1)/19);
+        System.out.println("width "+this.mapPacman.GetWidth());
+        if((this.pacmanXPosition + this.pacmanXDirection < 19 || this.pacmanXDirection+this.pacmanXPosition > (this.mapPacman.GetWidth()-2)*19) 
+            && (this.mapPacman.GetMap((this.pacmanXDirection+this.pacmanXPosition)/19, this.pacmanYPosition/19))!=0 )
+        {
+            if(this.pacmanXPosition+this.pacmanXDirection == 0) this.pacmanXPosition = 19 * (this.mapPacman.GetWidth()-1) -1;
+            else if(this.pacmanXPosition + this.pacmanXDirection == 19 * (this.mapPacman.GetWidth()-1) ) this.pacmanXPosition=1;
+            else {
+                this.pacmanXPosition=this.pacmanXPosition+this.pacmanXDirection;
+            }
+        }
+        else if (this.mapPacman.GetMap((this.pacmanXPosition + this.pacmanXDirection) / 19,
                     (this.pacmanYPosition + this.pacmanYDirection) / 19) != 0
                     && this.mapPacman.GetMap(((this.pacmanXPosition + this.pacmanXDirection + 18) / 19),
                             ((this.pacmanYPosition + this.pacmanYDirection + 18) / 19)) != 0

@@ -130,7 +130,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         if(!play && !killed){
             g.setColor(Color.magenta);
             g.setFont(new Font(null, Font.BOLD,60));
-            g.drawString("PAUSA", 10+(mapPacman.GetWidth()*19)/2-30, 10+mapPacman.GetHeight()*19);
+            g.drawString("PAUSE", 10+(mapPacman.GetWidth()*19)/2-30, 10+mapPacman.GetHeight()*19);
         }
 
         
